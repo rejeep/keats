@@ -69,8 +69,27 @@
 (defvar keats-file "~/.keats"
   "Path to file where keats are stored.")
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun keats-read-key ()
+  ""
+  )
+
+(defun keats-add ()
+  (interactive)
+  ""
+  )
+
+(defun keats-get ()
+  (interactive)
+  ""
+  )
+
+(defun keats-search ()
+  (interactive)
+  ""
+  )
 
 (define-minor-mode keats-mode
   ""
