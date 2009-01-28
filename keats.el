@@ -59,3 +59,14 @@
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defconst keats-version ""
+  "Keats version.")
+
+(defvar keats-mode-map (make-sparse-keymap)
+  "Keymap for `keats-mode'.")
+
+(defvar keats-file "~/.keats"
+  "Path to file where keats are stored.")
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
