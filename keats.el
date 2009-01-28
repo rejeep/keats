@@ -34,6 +34,15 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; Installation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; To use this mode you first have to make sure that this file is in
+;; your load-path variable:
+;; (add-to-list 'load-path "/path/to/directory/or/file")
+;;
+;; Then require it:
+;; (require 'keats)
+;;
+;; Then start it:
+;; (keats-mode t) or M-x keats-mode
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
