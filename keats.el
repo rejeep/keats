@@ -70,3 +70,16 @@
   "Path to file where keats are stored.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(define-minor-mode keats-mode
+  ""
+  :init-value nil
+  :keymap keats-mode-map
+  (if keats-mode
+
+      ))
+
+(provide 'keats)
+
+;;; keats.el ends here
