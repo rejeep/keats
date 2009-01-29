@@ -105,6 +105,10 @@
   ""
   )
 
+(defun keats-file-exits-p ()
+  ""
+  (and (file-exists-p keats-file) (not (file-directory-p keats-file))))
+
 (define-minor-mode keats-mode
   ""
   :init-value nil
