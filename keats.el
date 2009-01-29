@@ -117,12 +117,9 @@
       (cond ((keats-file-exits-p)
              (cond ((yes-or-no-p (concat keats-file "does not exits. Do you want to create it? "))
                     (create-buffer)
-                    (write-file keats-file nil)
-                    
-                    ))))))
+                    (write-file keats-file nil)))))))
         (unless (keats-file-exits-p)
-          (setq keats-mode nil)
-        ))
+          (setq keats-mode nil)))
 
 (provide 'keats)
 
