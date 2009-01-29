@@ -106,20 +106,27 @@
   )
 
 (defun keats-file-exits-p ()
-  ""
+  "Returns true if keats file exists. False otherwise."
   (and (file-exists-p keats-file) (not (file-directory-p keats-file))))
 
+(defun keats-file-valid-p ()
+  "Returns true if keats file is valid (read and writable). False otherwise."
+  (and (file-readable-p keats-file) (file-writable-p keats-file)))
+
 (define-minor-mode keats-mode
-  ""
+  "Simple interface to Emacs keybinding cheats."
   :init-value nil
   :keymap keats-mode-map
   (cond (keats-mode
-      (cond ((keats-file-exits-p)
-             (cond ((yes-or-no-p (concat keats-file "does not exits. Do you want to create it? "))
-                    (create-buffer)
-                    (write-file keats-file nil)))))))
-        (unless (keats-file-exits-p)
-          (setq keats-mode nil)))
+         (cond ((not (keats-file-exits-p))
+                (let ((buffer "*keats*"))
+                  (switch-to-buffer (get-buffer-create buffer))
+                  (write-file keats-file nil)
+                  (kill-this-buffer)))
+               (t
+                (unless (keats-file-valid-p)
+                  (print "No valid keats file")
+                  (setq keats-mode nil)))))))
 
 (provide 'keats)
 
