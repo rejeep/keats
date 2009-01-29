@@ -72,22 +72,36 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defun keats-read-key ()
-  ""
-  )
-
 (defun keats-add ()
   (interactive)
   ""
   )
 
-(defun keats-get ()
+(defun keats-edit ()
+  (interactive)
+  ""
+  )
+
+(defun keats-delete ()
+  (interactive)
+  ""
+  )
+
+(defun keats-get-description ()
   (interactive)
   ""
   )
 
 (defun keats-search ()
   (interactive)
+  ""
+  )
+
+(defun keats-read-key ()
+  ""
+  )
+
+(defun keats-goto ()
   ""
   )
 
