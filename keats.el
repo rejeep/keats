@@ -118,15 +118,14 @@
   :init-value nil
   :keymap keats-mode-map
   (cond (keats-mode
-         (cond ((not (keats-file-exits-p))
+         (cond ((not (keats-file-exists-p))
                 (let ((buffer "*keats*"))
                   (switch-to-buffer (get-buffer-create buffer))
                   (write-file keats-file nil)
-                  (kill-this-buffer)))
-               (t
-                (unless (keats-file-valid-p)
-                  (print "No valid keats file")
-                  (setq keats-mode nil)))))))
+                  (kill-this-buffer))))
+         (unless (keats-file-valid-p)
+           (print "No valid keats file")
+           (setq keats-mode nil)))))
 
 (provide 'keats)
 
