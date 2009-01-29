@@ -105,7 +105,7 @@
   ""
   )
 
-(defun keats-file-exits-p ()
+(defun keats-file-exists-p ()
   "Returns true if keats file exists. False otherwise."
   (and (file-exists-p keats-file) (not (file-directory-p keats-file))))
 
