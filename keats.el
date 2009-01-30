@@ -100,12 +100,18 @@
   )
 
 (defun keats-read-key ()
-  ""
-  )
+  "Reads a key sequence from the keyboard. To end input, press
+RET and key sequence will be returned. And to abort, press C-g
+and nil will be returned."
+  (let ((cursor-in-echo-area t) (key) (res))
+    (setq key (read-key-sequence "Describe key: "))
+    (while (not (string-match "RET\\|C-g" (key-description key)))
+      (setq res (concat res key))
+      (setq key (read-key-sequence (key-description res))))
+    (if (string= (key-description key) "RET")
+        (unless (string= (key-description res) "")
+          (key-description res)))))
 
-(defun keats-goto ()
-  ""
-  )
 
 (defun keats-file-exists-p ()
   "Returns true if keats file exists. False otherwise."
