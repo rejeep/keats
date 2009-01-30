@@ -112,6 +112,19 @@ and nil will be returned."
         (unless (string= (key-description res) "")
           (key-description res)))))
 
+(defun keats-find-key ()
+  "Searches `keats-file' for a keyboard sequence. If the
+  sequence is found, the beginning line position of that line is
+  returned. If there is no match, nil is returned."
+  (let ((key (keats-read-key)) (res))
+    (switch-to-buffer (get-buffer-create keats-temp-buffer))
+    (delete-region (point-min) (point-max))
+    (insert-file-contents-literally keats-file)
+    (beginning-of-buffer)
+    (if (re-search-forward (concat "^" key ":.*$") nil t)
+        (setq res (line-beginning-position)))
+    (kill-this-buffer)
+    res))
 
 (defun keats-file-exists-p ()
   "Returns true if keats file exists. False otherwise."
