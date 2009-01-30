@@ -127,10 +127,9 @@ and nil will be returned."
   :keymap keats-mode-map
   (cond (keats-mode
          (cond ((not (keats-file-exists-p))
-                (let ((buffer "*keats*"))
-                  (switch-to-buffer (get-buffer-create buffer))
-                  (write-file keats-file nil)
-                  (kill-this-buffer))))
+                (switch-to-buffer (get-buffer-create keats-temp-buffer))
+                (write-file keats-file nil)
+                (kill-this-buffer)))
          (unless (keats-file-valid-p)
            (print "No valid keats file")
            (setq keats-mode nil)))))
