@@ -69,6 +69,8 @@
 (defvar keats-file "~/.keats"
   "Path to file where keats are stored.")
 
+(defvar keats-temp-buffer "*keats*"
+  "Temp buffer.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
