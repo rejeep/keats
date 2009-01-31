@@ -98,7 +98,7 @@ it exists, `keats-edit' is called if user confirms."
          (insert (concat key keats-delimiter description))
          (save-buffer)
          (kill-this-buffer)
-         (print (concat key " added to `keats-file'.")))))
+         (print (concat key " added")))))
 
 (defun keats-edit (&optional key description)
   "Edits a keat in `keats-file' if it exists."
@@ -112,9 +112,9 @@ it exists, `keats-edit' is called if user confirms."
            (replace-regexp (concat keats-delimiter ".*") (concat keats-delimiter description) nil (line-beginning-position) (line-end-position))
            (save-buffer)
            (kill-this-buffer)
-           (print "Updated keat"))
+           (print (concat "Updated " key)))
           (t
-           (print "Keat does not exist")))))
+           (print (concat key " not found"))))))
 
 (defun keats-delete (&optional key)
   "Deletes the given key sequence from `keats-file'."
