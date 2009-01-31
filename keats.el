@@ -81,7 +81,7 @@ it exists, `keats-edit' is called if user confirms."
   (or key (setq key (keats-read-key)))
   (cond ((and key (keats-find-key-position key))
          (if (yes-or-no-p "Already exists. Do you want to edit it? ")
-             (keats-edit)))
+             (keats-edit key)))
         (t
          (or description (setq description (read-string "Description: ")))
          (find-file keats-file)
