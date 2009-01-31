@@ -154,10 +154,25 @@ it exists, `keats-edit' is called if user confirms."
     (kill-this-buffer)
     res))
 
-(defun keats-search ()
-  (interactive)
-  ""
-  )
+(defun keats-search (query)
+  "Searches in `keats-file' for lines that matches QUERY as
+description."
+  (interactive "*sQuery: ")
+  (let ((res) (case-fold-search t))
+    (switch-to-buffer (get-buffer-create keats-temp-buffer))
+    (delete-region (point-min) (point-max))
+    (insert-file-contents-literally keats-file)
+    (goto-char (point-min))
+    (setq query (concat "^\\(.*\\)|\\(.*" query ".*\\)$"))
+    (while (re-search-forward query nil t)
+      (add-to-list 'res (concat (match-string 1) ": " (match-string 2))))
+    (cond (res
+           (delete-region (point-min) (point-max))
+           (dolist (hit res)
+             (insert (concat hit "\n"))))
+          (t
+           (kill-this-buffer)
+           (print "No matches")))))
 
 (defun keats-read-key ()
   "Reads a key sequence from the keyboard. To end input, press
