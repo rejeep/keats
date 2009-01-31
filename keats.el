@@ -72,6 +72,12 @@
 (defvar keats-temp-buffer "*keats*"
   "Temp buffer.")
 
+(defvar keats-delimiter "|"
+  "The delimiter used in `keats-file' to separate key sequence
+  from description. Don't change this when you already have
+  contents in you `keats-file'. If you do this, old keats will
+  not be recognized.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun keats-add (&optional key description)
@@ -89,7 +95,7 @@ it exists, `keats-edit' is called if user confirms."
          (unless (= (current-column) 0)
            (let ((next-line-add-newlines t))
              (next-line)))
-         (insert (concat key "|" description))
+         (insert (concat key keats-delimiter description))
          (save-buffer)
          (kill-this-buffer)
          (print (concat key " added to `keats-file'.")))))
@@ -103,7 +109,7 @@ it exists, `keats-edit' is called if user confirms."
            (or description (setq description (read-string "Description: " (keats-get-description key))))
            (find-file keats-file)
            (goto-char pos)
-           (replace-regexp "|.*" (concat "|" description) nil (line-beginning-position) (line-end-position))
+           (replace-regexp (concat keats-delimiter ".*") (concat keats-delimiter description) nil (line-beginning-position) (line-end-position))
            (save-buffer)
            (kill-this-buffer)
            (print "Updated keat"))
@@ -134,7 +140,7 @@ it exists, `keats-edit' is called if user confirms."
         (find-file keats-file)
         (goto-char pos)
         (setq string (buffer-substring (line-beginning-position) (line-end-position)))
-        (string-match (concat "^" key "|\\(.*\\)$") string)
+        (string-match (concat "^" key keats-delimiter "\\(.*\\)$") string)
         (setq res (match-string-no-properties 1 string))
         (kill-this-buffer)
         res)))
@@ -149,7 +155,7 @@ it exists, `keats-edit' is called if user confirms."
   (insert-file-contents-literally keats-file)
   (goto-char (point-min))
   (let ((res))
-    (if (re-search-forward (concat "^" key "|.*$") nil t)
+    (if (re-search-forward (concat "^" key keats-delimiter ".*$") nil t)
         (setq res (line-beginning-position)))
     (kill-this-buffer)
     res))
@@ -163,7 +169,7 @@ description."
     (delete-region (point-min) (point-max))
     (insert-file-contents-literally keats-file)
     (goto-char (point-min))
-    (setq query (concat "^\\(.*\\)|\\(.*" query ".*\\)$"))
+    (setq query (concat "^\\(.*\\)" keats-delimiter "\\(.*" query ".*\\)$"))
     (while (re-search-forward query nil t)
       (add-to-list 'res (concat (match-string 1) ": " (match-string 2))))
     (cond (res
