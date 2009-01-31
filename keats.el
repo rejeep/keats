@@ -73,14 +73,25 @@
   "Temp buffer.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defun keats-add ()
-  (interactive)
+(defun keats-add (&optional key description)
   ""
-  )
-
-(defun keats-edit ()
   (interactive)
+  (or key (setq key (keats-read-key)))
+  (cond ((and key (keats-find-key-position key))
+         (if (yes-or-no-p "Already exists. Do you want to edit it? ")
+             (keats-edit)))
+         (t
+          (or description (setq description (read-string "Description: ")))
+          (find-file keats-file)
+          (goto-char (point-max))
+          (unless (= (current-column) 0)
+            (let ((next-line-add-newlines t))
+              (next-line)))
+          (insert (concat key "|" description))
+          (save-buffer)
+          (kill-this-buffer)
+          (print (concat key " added to `keats-file'.")))))
+
   ""
   )
 
