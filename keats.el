@@ -94,14 +94,21 @@ it exists, `keats-edit' is called if user confirms."
          (kill-this-buffer)
          (print (concat key " added to `keats-file'.")))))
 
-(defun keats-edit (&optional key)
-  ""
+(defun keats-edit (&optional key description)
+  "Edits a keat in `keats-file' if it exists."
   (interactive)
   (or key (setq key (keats-read-key)))
-  (cond ((and key (keats-find-key-position key))
-
-         ))
-  )
+  (let ((line) (pos (keats-find-key-position key)))
+    (cond ((and key pos)
+           (or description (setq description (read-string "Description: " (keats-get-description key))))
+           (find-file keats-file)
+           (goto-char pos)
+           (replace-regexp "|.*" (concat "|" description) nil (line-beginning-position) (line-end-position))
+           (save-buffer)
+           (kill-this-buffer)
+           (print "Updated keat"))
+          (t
+           (print "Keat does not exist")))))
 
 (defun keats-delete (&optional key)
   "Deletes the given key sequence from `keats-file'."
