@@ -66,8 +66,11 @@
 (defvar keats-mode-map (make-sparse-keymap)
   "Keymap for `keats-mode'.")
 
+(defvar keats-prefix-key "C-c k"
+  "Prefix key.")
+
 (define-prefix-command 'keats-mode-map)
-(global-set-key (kbd "C-c k") 'keats-mode-map)
+(global-set-key (kbd keats-prefix-key) 'keats-mode-map)
 (let ((map keats-mode-map))
   (define-key map (kbd "a") 'keats-add)
   (define-key map (kbd "e") 'keats-edit)
