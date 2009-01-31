@@ -116,7 +116,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(defconst keats-version ""
+(defconst keats-version "0.0.1"
   "Keats version.")
 
 (defvar keats-mode-map (make-sparse-keymap)
