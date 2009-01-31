@@ -136,19 +136,27 @@ it exists, `keats-edit' is called if user confirms."
 
 (defun keats-get-description (&optional key)
   "Returns the description of the given key sequence."
+  (setq key (keats-key-or-read-key key))
+  (let ((res)
+        (string)
+        (pos (keats-find-key-position key)))
+    (cond ((and key pos)
+           (find-file keats-file)
+           (goto-char pos)
+           (setq string (buffer-substring (line-beginning-position) (line-end-position)))
+           (string-match (concat "^" key keats-delimiter "\\(.*\\)$") string)
+           (setq res (match-string-no-properties 1 string))
+           (kill-this-buffer)
+           res))))
+
+(defun keats-print-description (&optional key)
+  "Prints the description of the given key sequence."
   (interactive)
   (setq key (keats-key-or-read-key key))
-  (if key
-      (let ((res)
-            (string)
-            (pos (keats-find-key-position key)))
-        (find-file keats-file)
-        (goto-char pos)
-        (setq string (buffer-substring (line-beginning-position) (line-end-position)))
-        (string-match (concat "^" key keats-delimiter "\\(.*\\)$") string)
-        (setq res (match-string-no-properties 1 string))
-        (kill-this-buffer)
-        res)))
+  (let ((res (keats-get-description key)))
+    (if res
+        (print res)
+      (print (concat key " not found")))))
 
 (defun keats-search (query)
   "Searches in `keats-file' for lines that matches QUERY as
