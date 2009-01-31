@@ -82,19 +82,25 @@ it exists, `keats-edit' is called if user confirms."
   (cond ((and key (keats-find-key-position key))
          (if (yes-or-no-p "Already exists. Do you want to edit it? ")
              (keats-edit)))
-         (t
-          (or description (setq description (read-string "Description: ")))
-          (find-file keats-file)
-          (goto-char (point-max))
-          (unless (= (current-column) 0)
-            (let ((next-line-add-newlines t))
-              (next-line)))
-          (insert (concat key "|" description))
-          (save-buffer)
-          (kill-this-buffer)
-          (print (concat key " added to `keats-file'.")))))
+        (t
+         (or description (setq description (read-string "Description: ")))
+         (find-file keats-file)
+         (goto-char (point-max))
+         (unless (= (current-column) 0)
+           (let ((next-line-add-newlines t))
+             (next-line)))
+         (insert (concat key "|" description))
+         (save-buffer)
+         (kill-this-buffer)
+         (print (concat key " added to `keats-file'.")))))
 
+(defun keats-edit (&optional key)
   ""
+  (interactive)
+  (or key (setq key (keats-read-key)))
+  (cond ((and key (keats-find-key-position key))
+
+         ))
   )
 
 (defun keats-delete (&optional key)
