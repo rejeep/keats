@@ -90,9 +90,19 @@
   )
 
 (defun keats-get-description ()
+  "Returns the description of the given key sequence."
   (interactive)
-  ""
-  )
+  (let* ((res)
+         (string)
+         (key (keats-read-key))
+         (pos (keats-find-key-position key)))
+    (find-file keats-file)
+    (goto-char pos)
+    (setq string (buffer-substring (line-beginning-position) (line-end-position)))
+    (string-match (concat "^" key "|\\(.*\\)$") string)
+    (setq res (match-string-no-properties 1 string))
+    (kill-this-buffer)
+    res))
 
 (defun keats-search ()
   (interactive)
