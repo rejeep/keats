@@ -247,11 +247,10 @@ description."
            (kill-this-buffer)
            (print "No matches")))))
 
-(defun keats-find-key-position (&optional key)
+(defun keats-find-key-position (key)
   "Searches `keats-file' for a keyboard sequence. If the
   sequence is found, the beginning line position of that line is
   returned. If there is no match, nil is returned."
-  (setq key (keats-key-or-read-key key))
   (switch-to-buffer (get-buffer-create keats-temp-buffer))
   (delete-region (point-min) (point-max))
   (insert-file-contents-literally keats-file)
