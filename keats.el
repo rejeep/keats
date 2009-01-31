@@ -73,8 +73,10 @@
   "Temp buffer.")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (defun keats-add (&optional key description)
-  ""
+  "Adds a keat to `keats-file' if it does not already exist. If
+it exists, `keats-edit' is called if user confirms."
   (interactive)
   (or key (setq key (keats-read-key)))
   (cond ((and key (keats-find-key-position key))
