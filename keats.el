@@ -84,10 +84,18 @@
   ""
   )
 
-(defun keats-delete ()
+(defun keats-delete (&optional key)
+  "Deletes the given key sequence from `keats-file'."
   (interactive)
-  ""
-  )
+  (or key (setq key (keats-read-key)))
+  (if key
+      (let ((pos (keats-find-key-position key)))
+        (find-file keats-file)
+        (goto-char pos)
+        (set-mark (point))
+        (next-line)
+        (delete-region (point) (mark))
+        (kill-this-buffer))))
 
 (defun keats-get-description (&optional key)
   "Returns the description of the given key sequence."
