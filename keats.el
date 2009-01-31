@@ -121,7 +121,7 @@
   (switch-to-buffer (get-buffer-create keats-temp-buffer))
   (delete-region (point-min) (point-max))
   (insert-file-contents-literally keats-file)
-  (beginning-of-buffer)
+  (goto-char (point-min))
   (let ((res))
     (if (re-search-forward (concat "^" key "|.*$") nil t)
         (setq res (line-beginning-position)))
