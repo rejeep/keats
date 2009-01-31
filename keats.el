@@ -145,21 +145,6 @@ it exists, `keats-edit' is called if user confirms."
         (kill-this-buffer)
         res)))
 
-(defun keats-find-key-position (&optional key)
-  "Searches `keats-file' for a keyboard sequence. If the
-  sequence is found, the beginning line position of that line is
-  returned. If there is no match, nil is returned."
-  (setq key (keats-key-or-read-key key))
-  (switch-to-buffer (get-buffer-create keats-temp-buffer))
-  (delete-region (point-min) (point-max))
-  (insert-file-contents-literally keats-file)
-  (goto-char (point-min))
-  (let ((res))
-    (if (re-search-forward (concat "^" key keats-delimiter ".*$") nil t)
-        (setq res (line-beginning-position)))
-    (kill-this-buffer)
-    res))
-
 (defun keats-search (query)
   "Searches in `keats-file' for lines that matches QUERY as
 description."
@@ -179,6 +164,21 @@ description."
           (t
            (kill-this-buffer)
            (print "No matches")))))
+
+(defun keats-find-key-position (&optional key)
+  "Searches `keats-file' for a keyboard sequence. If the
+  sequence is found, the beginning line position of that line is
+  returned. If there is no match, nil is returned."
+  (setq key (keats-key-or-read-key key))
+  (switch-to-buffer (get-buffer-create keats-temp-buffer))
+  (delete-region (point-min) (point-max))
+  (insert-file-contents-literally keats-file)
+  (goto-char (point-min))
+  (let ((res))
+    (if (re-search-forward (concat "^" key keats-delimiter ".*$") nil t)
+        (setq res (line-beginning-position)))
+    (kill-this-buffer)
+    res))
 
 (defun keats-read-key ()
   "Reads a key sequence from the keyboard. To end input, press
