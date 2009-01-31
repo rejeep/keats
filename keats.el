@@ -66,6 +66,15 @@
 (defvar keats-mode-map (make-sparse-keymap)
   "Keymap for `keats-mode'.")
 
+(define-prefix-command 'keats-mode-map)
+(global-set-key (kbd "C-c k") 'keats-mode-map)
+(let ((map keats-mode-map))
+  (define-key map (kbd "a") 'keats-add)
+  (define-key map (kbd "e") 'keats-edit)
+  (define-key map (kbd "r") 'keats-remove)
+  (define-key map (kbd "d") 'keats-print-description)
+  (define-key map (kbd "s") 'keats-search))
+
 (defvar keats-file "~/.keats"
   "Path to file where keats are stored.")
 
