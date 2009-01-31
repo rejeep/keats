@@ -116,18 +116,23 @@ it exists, `keats-edit' is called if user confirms."
           (t
            (print (concat key " not found"))))))
 
-(defun keats-delete (&optional key)
-  "Deletes the given key sequence from `keats-file'."
+(defun keats-remove (&optional key)
+  "Removes the given key sequence from `keats-file'."
   (interactive)
   (setq key (keats-key-or-read-key key))
-  (if key
-      (let ((pos (keats-find-key-position key)))
-        (find-file keats-file)
-        (goto-char pos)
-        (set-mark (point))
-        (next-line)
-        (delete-region (point) (mark))
-        (kill-this-buffer))))
+  (let ((pos (keats-find-key-position key)))
+    (cond ((and key pos)
+           (find-file keats-file)
+           (goto-char pos)
+           (set-mark (point))
+           (let ((next-line-add-newlines t))
+             (next-line))
+           (delete-region (point) (mark))
+           (save-buffer)
+           (kill-this-buffer)
+           (print (concat key " removed")))
+          (t
+           (print (concat key " not found"))))))
 
 (defun keats-get-description (&optional key)
   "Returns the description of the given key sequence."
