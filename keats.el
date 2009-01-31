@@ -23,12 +23,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Vocabulary ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;
+;; Keat - Is a short for Keyboard Shortcut Cheat.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; Description ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; Keats is a mode that one can say is an interface to a cheats file
+;; containing Emacs keyboard shortcuts (shortcut and
+;; description). With this mode you can easy add, edit, remove, show
+;; and search your keats without having to leave the buffer you are
+;; currently working in.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -48,11 +53,62 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Commentary ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; This mode stores all keats in the file given by the variable
+;; `keats-file'. The default value is a hidden file named .keats that
+;; will end up in your HOME folder. If you are not happy with that
+;; file you can change it yourself:
+;; (setq keats-file "~/emacs.d/keats")
+;;
+;; All keats are by default stored in `keats-file' in the format
+;; "Key|Description". The pipe (|) is used as a delimiter. You can
+;; change the delimiter by changing the variable `keats-delimiter':
+;; (setq keats-delimiter ":")
+;;
+;; You can not however change this to whatever you want. For example a
+;; whitespace will not work since both a key sequence and a
+;; description may contain whitespaces. Also be aware of that
+;; `keats-delimiter' is used in some regular expressions. This means
+;; that if you want to use for example a dot (.) as a delimiter, you
+;; must escape it:
+;; (setq keats-delimiter "\.")
+;;
+;; Many of the commands will prompt you for a key sequence. To enter
+;; one, start type the sequence and when done press RET (enter). If
+;; you want to abort, press C-g.
+;;
+;; == ADD (C-c k a)
+;; Will add a new keat if it does not already
+;; exist. If it does exists the edit action will be called with the
+;; same key. Read below under edit.
+;;
+;; == EDIT (C-c k e)
+;; Edits an already existing keat.
+;;
+;; == DESCRIPTION (C-c k d)
+;; Print the description for a keat.
+;;
+;; == SEARCH
+;; Searches regularly, without respect to case, in description for a
+;; keyword. A new buffer containing all hits is created. If none is
+;; found, a message is printed.
+;;
+;; == REMOVE (C-c k r)
+;; Removes a keat.
+;;
+;; Note that even thought this might not be a common usage, all of the
+;; above action can be called from a lisp program:
+;; (keats-add "C-x C-f" "Opens file")
+;; (keats-edit "C-x C-f" "Opens file is a new buffer")
+;; (keats-print-description "C-x C-f")
+;; (keats-search "buffer")
+;; (keats-remove "C-x C-f")
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; History ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
+;; DATE          VERSION    UPDATES/CHANGES
+;; 2009-01-31    0.0.1      First version released.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
