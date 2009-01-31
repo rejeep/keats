@@ -112,7 +112,7 @@ and nil will be returned."
         (unless (string= (key-description res) "")
           (key-description res)))))
 
-(defun keats-find-key ()
+(defun keats-find-key-position ()
   "Searches `keats-file' for a keyboard sequence. If the
   sequence is found, the beginning line position of that line is
   returned. If there is no match, nil is returned."
