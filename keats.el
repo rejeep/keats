@@ -72,6 +72,10 @@
 ;; must escape it:
 ;; (setq keats-delimiter "\.")
 ;;
+;; Note that you can not change the value of this variable when you
+;; have keats in `keats-file'. You then manually have to update the
+;; delimiter.
+;;
 ;; Many of the commands will prompt you for a key sequence. To enter
 ;; one, start type the sequence and when done press RET (enter). If
 ;; you want to abort, press C-g.
