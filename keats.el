@@ -101,6 +101,19 @@
     (setq string (buffer-substring (line-beginning-position) (line-end-position)))
     (string-match (concat "^" key "|\\(.*\\)$") string)
     (setq res (match-string-no-properties 1 string))
+
+(defun keats-find-key-position (&optional key)
+  "Searches `keats-file' for a keyboard sequence. If the
+  sequence is found, the beginning line position of that line is
+  returned. If there is no match, nil is returned."
+  (or key (setq key (keats-read-key)))
+  (switch-to-buffer (get-buffer-create keats-temp-buffer))
+  (delete-region (point-min) (point-max))
+  (insert-file-contents-literally keats-file)
+  (beginning-of-buffer)
+  (let ((res))
+    (if (re-search-forward (concat "^" key "|.*$") nil t)
+        (setq res (line-beginning-position)))
     (kill-this-buffer)
     res))
 
@@ -121,21 +134,6 @@ and nil will be returned."
     (if (string= (key-description key) "RET")
         (unless (string= (key-description res) "")
           (key-description res)))))
-
-(defun keats-find-key-position (&optional key)
-  "Searches `keats-file' for a keyboard sequence. If the
-  sequence is found, the beginning line position of that line is
-  returned. If there is no match, nil is returned."
-  (or key (setq key (keats-read-key)))
-  (switch-to-buffer (get-buffer-create keats-temp-buffer))
-  (delete-region (point-min) (point-max))
-  (insert-file-contents-literally keats-file)
-  (beginning-of-buffer)
-  (let ((res))
-    (if (re-search-forward (concat "^" key "|.*$") nil t)
-        (setq res (line-beginning-position)))
-    (kill-this-buffer)
-    res))
 
 (defun keats-file-exists-p ()
   "Returns true if keats file exists. False otherwise."
