@@ -121,7 +121,7 @@ and nil will be returned."
     (delete-region (point-min) (point-max))
     (insert-file-contents-literally keats-file)
     (beginning-of-buffer)
-    (if (re-search-forward (concat "^" key ":.*$") nil t)
+    (if (re-search-forward (concat "^" key "|.*$") nil t)
         (setq res (line-beginning-position)))
     (kill-this-buffer)
     res))
