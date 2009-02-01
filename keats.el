@@ -183,7 +183,7 @@ it exists, `keats-edit' is called if user confirms."
   (interactive)
   (setq key (keats-key-or-read-key key))
   (let ((pos (keats-find-key-position key)))
-    (cond ((and key pos)
+    (cond ((and key pos (yes-or-no-p (concat "Are you sure you want to remove " key " ? ")))
            (find-file keats-file)
            (goto-char pos)
            (set-mark (point))
