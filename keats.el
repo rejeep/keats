@@ -109,19 +109,9 @@
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; History ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; DATE          VERSION    UPDATES/CHANGES
-;; 2009-01-31    0.0.1      First version released.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 ;;; Code:
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defconst keats-version "0.0.1"
-  "Keats version.")
 
 (defvar keats-mode-map (make-sparse-keymap)
   "Keymap for `keats-mode'.")
