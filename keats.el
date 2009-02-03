@@ -293,8 +293,7 @@ is read."
                 (write-file keats-file nil)
                 (kill-this-buffer)))
          (unless (keats-file-valid-p)
-           (print "No valid keats file")
-           (setq keats-mode nil)))))
+           (error "No valid keats file")))))
 
 (provide 'keats)
 
