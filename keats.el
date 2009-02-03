@@ -145,7 +145,7 @@
   "Adds a keat to `keats-file' if it does not already exist. If
 it exists, `keats-edit' is called if user confirms."
   (interactive)
-  (setq key (keats-key-or-read-key key))
+  (setq key (or key (keats-read-key)))
   (if key
       (cond ((keats-find-key-position key)
              (if (yes-or-no-p "Already exists. Do you want to edit it? ")
@@ -165,7 +165,7 @@ it exists, `keats-edit' is called if user confirms."
 (defun keats-edit (&optional key description)
   "Edits a keat in `keats-file' if it exists."
   (interactive)
-  (setq key (keats-key-or-read-key key))
+  (setq key (or key (keats-read-key)))
   (let ((line)
         (pos (keats-find-key-position key))
         (old-description (keats-get-description key)))
@@ -183,7 +183,7 @@ it exists, `keats-edit' is called if user confirms."
 (defun keats-remove (&optional key)
   "Removes the given key sequence from `keats-file'."
   (interactive)
-  (setq key (keats-key-or-read-key key))
+  (setq key (or key (keats-read-key)))
   (let ((pos (keats-find-key-position key)))
     (cond ((and key pos (yes-or-no-p (concat "Are you sure you want to remove " key " ? ")))
            (find-file keats-file)
@@ -200,7 +200,7 @@ it exists, `keats-edit' is called if user confirms."
 
 (defun keats-get-description (&optional key)
   "Returns the description of the given key sequence."
-  (setq key (keats-key-or-read-key key))
+  (setq key (or key (keats-read-key)))
   (let ((res)
         (string)
         (pos (keats-find-key-position key)))
@@ -216,7 +216,7 @@ it exists, `keats-edit' is called if user confirms."
 (defun keats-print-description (&optional key)
   "Prints the description of the given key sequence."
   (interactive)
-  (setq key (keats-key-or-read-key key))
+  (setq key (or key (keats-read-key)))
   (let ((res (keats-get-description key)))
     (if res
         (print res)
@@ -276,12 +276,6 @@ and nil will be returned."
 (defun keats-file-valid-p ()
   "Returns true if keats file is valid (read and writable). False otherwise."
   (and (file-readable-p keats-file) (file-writable-p keats-file)))
-
-(defun keats-key-or-read-key (key)
-  "If KEY is non-nil, KEY is returned. Otherwise a key sequence
-is read."
-  (or key (setq key (keats-read-key)))
-  key)
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
