@@ -125,17 +125,19 @@
   (define-key map (kbd "d") 'keats-print-description)
   (define-key map (kbd "s") 'keats-search))
 
-(defvar keats-file "~/.keats"
-  "Path to file where keats are stored.")
-
 (defvar keats-temp-buffer "*keats*"
   "Temp buffer.")
 
-(defvar keats-delimiter "|"
+(defcustom keats-file "~/.keats"
+  "Path to file where keats are stored."
+  :group 'keats)
+
+(defcustom keats-delimiter "|"
   "The delimiter used in `keats-file' to separate key sequence
   from description. Don't change this when you already have
   contents in you `keats-file'. If you do this, old keats will
-  not be recognized.")
+  not be recognized."
+  :group 'keats)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
