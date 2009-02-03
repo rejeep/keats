@@ -168,10 +168,10 @@
   "Edit the description of an already existing keat."
   (interactive)
   (setq key (or key (keats-read-key)))
-  (if key
-      (let ((keat (keats-key-exists key)))
-        (setq description (or description (read-string "Description: " (plist-get keat :description))))
-        (plist-put keat :description description))))
+  (let ((keat (keats-key-exists key)))
+    (cond ((and key keat)
+           (setq description (or description (read-string "Description: " (plist-get keat :description))))
+           (plist-put keat :description description)))))
 
 (defun keats-remove (&optional key)
   "Removes a keat from the list."
