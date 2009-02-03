@@ -280,6 +280,13 @@ and nil will be returned."
   "Returns true if keats file is valid (read and writable). False otherwise."
   (and (file-readable-p keats-file) (file-writable-p keats-file)))
 
+(defun keats-key-exists (key)
+  "Returns t if key exists. False otherwise."
+  (let ((list keats-list))
+    (while (and (not (string= (plist-get (car list) :key) key)) list)
+      (setq list (cdr list)))
+    (not (not list))))
+
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
   :init-value nil
