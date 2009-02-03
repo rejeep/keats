@@ -134,7 +134,8 @@
   "Temp buffer.")
 
 (defvar keats-list '()
-  "List of plists where each plist is a keat.")
+  "List of plists where each plist is a keat on the form (:key
+\"key\" :description \"description\")")
 
 (defcustom keats-file "~/.keats"
   "Path to file where keats are stored."
