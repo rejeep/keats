@@ -128,6 +128,9 @@
 (defvar keats-temp-buffer "*keats*"
   "Temp buffer.")
 
+(defvar keats-list '()
+  "List of plists where each plist is a keat.")
+
 (defcustom keats-file "~/.keats"
   "Path to file where keats are stored."
   :group 'keats)
