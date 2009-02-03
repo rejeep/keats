@@ -180,17 +180,12 @@
   "Removes a keat from the list."
   (interactive)
   (setq key (or key (keats-read-key)))
-  (if key
-      (cond ((keats-key-exists key)
-             (let ((list keats-list))
-               (while (and (not (string= (plist-get (car list) :key) key)) list)
-                 (setq list (cdr list)))
-               (when (not (null list))
-                 (cond ((yes-or-no-p (concat "Are you sure you want to remove " key " ? "))
-                        (setq keats-list (remove (car list) keats-list))
-                        (print (concat "Removed " key)))))))
-            (t
-             (print (concat key " not found"))))))
+  (let ((keat (keats-key-exists key)))
+    (cond ((and key keat)
+           (setq keats-list (remove keat keats-list))
+           (print (concat key " removed")))
+          (t
+           (print (concat key " not found"))))))
 
 (defun keats-get-description (key)
   "Returns the description of the given key sequence."
