@@ -214,10 +214,11 @@
   "Prints the description of the given key sequence."
   (interactive)
   (setq key (or key (keats-read-key)))
-  (let ((res (keats-get-description key)))
-    (if res
-        (print res)
-      (print (concat key " not found")))))
+  (if key
+      (let ((res (keats-get-description key)))
+        (if res
+            (print res)
+          (print (concat key " not found"))))))
 
 (defun keats-search (query)
   "Searches for keats that matches QUERY as description."
