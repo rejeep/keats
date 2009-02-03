@@ -169,7 +169,7 @@
   (interactive)
   (setq key (or key (keats-read-key)))
   (let ((keat (keats-key-exists key)))
-    (cond ((and key keat)
+    (cond (keat
            (setq description (or description (read-string "Description: " (plist-get keat :description))))
            (plist-put keat :description description)
            (print (concat key " updated")))
@@ -181,7 +181,7 @@
   (interactive)
   (setq key (or key (keats-read-key)))
   (let ((keat (keats-key-exists key)))
-    (cond ((and key keat)
+    (cond (keat
            (setq keats-list (remove keat keats-list))
            (print (concat key " removed")))
           (t
@@ -192,7 +192,7 @@
   (interactive)
   (setq key (or key (keats-read-key)))
   (let ((keat (keats-key-exists key)))
-    (if (and key keat)
+    (if keat
         (print (plist-get keat :description))
       (print (concat key " not found")))))
 
