@@ -275,7 +275,7 @@ and nil will be returned."
   (let ((list keats-list))
     (while (and (not (string= (plist-get (car list) :key) key)) list)
       (setq list (cdr list)))
-    (not (not list))))
+    (car list)))
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
