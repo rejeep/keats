@@ -220,24 +220,24 @@
       (print (concat key " not found")))))
 
 (defun keats-search (query)
-  "Searches in `keats-file' for lines that matches QUERY as
-description."
+  "Searches for keats that matches QUERY as description."
   (interactive "*sQuery: ")
-  (let ((res) (case-fold-search t))
-    (switch-to-buffer (get-buffer-create keats-temp-buffer))
-    (delete-region (point-min) (point-max))
-    (insert-file-contents-literally keats-file)
-    (goto-char (point-min))
-    (setq query (concat "^\\(.*\\)" keats-delimiter "\\(.*" query ".*\\)$"))
-    (while (re-search-forward query nil t)
-      (add-to-list 'res (concat (match-string 1) ": " (match-string 2))))
-    (cond (res
-           (delete-region (point-min) (point-max))
-           (dolist (hit res)
-             (insert (concat hit "\n"))))
-          (t
-           (kill-this-buffer)
-           (print "No matches")))))
+  (let ((matches '()) (key) (description))
+    (dolist (plist keats-list)
+      (setq key (plist-get plist :key))
+      (setq description (plist-get plist :description))
+      (if (string-match query description)
+          (add-to-list 'matches (concat key ": " description))))
+    (if matches
+        (cond ((= (length matches) 1)
+               (print (car matches)))
+              (t
+               (switch-to-buffer (get-buffer-create keats-temp-buffer))
+               (delete-region (point-min) (point-max))
+               (insert "Matches:\n")
+               (dolist (match matches)
+                 (insert (concat match "\n"))))))))
+
 
 (defun keats-find-key-position (key)
   "Searches `keats-file' for a keyboard sequence. If the
