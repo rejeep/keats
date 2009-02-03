@@ -66,7 +66,7 @@
 ;;
 ;; You can not however change this to whatever you want. For example a
 ;; whitespace will not work since both a key sequence and a
-;; description may contain whitespaces. Also be aware of that
+;; description may contain white spaces. Also be aware of that
 ;; `keats-delimiter' is used in some regular expressions. This means
 ;; that if you want to use for example a dot (.) as a delimiter, you
 ;; must escape it:
@@ -74,32 +74,36 @@
 ;;
 ;; Note that you can not change the value of this variable when you
 ;; have keats in `keats-file'. You then manually have to update the
-;; delimiter.
+;; delimiter in that file.
 ;;
 ;; Many of the commands will prompt you for a key sequence. To enter
 ;; one, start type the sequence and when done press RET (enter). If
 ;; you want to abort, press C-g.
 ;;
 ;; == ADD (C-c k a)
-;; Will add a new keat if it does not already
-;; exist. If it does exists the edit action will be called with the
-;; same key. Read below under edit.
+;; Will add a new keat if it does not already exist. If it does exists
+;; the edit action will be called with the same key. Read below under
+;; edit.
 ;;
 ;; == EDIT (C-c k e)
 ;; Edits an already existing keat.
 ;;
 ;; == DESCRIPTION (C-c k d)
-;; Print the description for a keat.
+;; Prints the description for a key sequence.
 ;;
 ;; == SEARCH
 ;; Searches regularly, without respect to case, in description for a
-;; keyword. A new buffer containing all hits is created. If none is
-;; found, a message is printed.
+;; keyword. If there is just one hit a message is printed in the
+;; minibuffer. If more than one hit a new buffer containing all hits
+;; is created. If none is found, a message is printed.
 ;;
 ;; == REMOVE (C-c k r)
 ;; Removes a keat.
 ;;
-;; Note that even thought this might not be a common usage, all of the
+;; == WRITE (C-c k w)
+;; Writes `keats-list' to file.
+;;
+;; Note that even though this might not be a common usage, all of the
 ;; above action can be called from a lisp program:
 ;; (keats-add "C-x C-f" "Opens file")
 ;; (keats-edit "C-x C-f" "Opens file is a new buffer")
