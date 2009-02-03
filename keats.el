@@ -248,10 +248,11 @@ and nil will be returned."
 
 (defun keats-key-exists (key)
   "Returns t if key exists. False otherwise."
-  (let ((list keats-list))
-    (while (and (not (string= (plist-get (car list) :key) key)) list)
-      (setq list (cdr list)))
-    (car list)))
+  (if key
+      (let ((list keats-list))
+        (while (and (not (string= (plist-get (car list) :key) key)) list)
+          (setq list (cdr list)))
+        (car list))))
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
