@@ -158,6 +158,26 @@
              (add-to-list 'keats-list `(:key ,key :description ,description))
              (print (concat key " added"))))))
 
+
+(defun keats-edit (&optional key description)
+  "Edit the description of an already existing keat."
+  (interactive)
+  (setq key (or key (keats-read-key)))
+  (if key
+      (cond ((keats-key-exists key)
+             (let ((list keats-list))
+               (while (and (not (string= (plist-get (car list) :key) key)) list)
+                 (setq list (cdr list)))
+               (when (not (null list))
+                 (let ((plist (car list)))
+                   (setq description (or description (read-string "Description: " (plist-get plist :description))))
+                   (setq keats-list (remove plist keats-list))
+                   (setq keats-list (cons (plist-put plist :description description) keats-list))
+                   (print (concat "Updated " key))))))
+            (t
+             (print (concat key " not found"))))))
+
+
 (defun keats-edit (&optional key description)
   "Edits a keat in `keats-file' if it exists."
   (interactive)
