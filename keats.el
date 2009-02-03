@@ -260,6 +260,16 @@ and nil will be returned."
       (setq list (cdr list)))
     (not (not list))))
 
+(defun keats-save ()
+  "Saves `keats-list' to `keats-file'."
+  (interactive)
+  (find-file keats-file)
+  (delete-region (point-min) (point-max))
+  (dolist (plist keats-list)
+    (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
+  (save-buffer)
+  (kill-this-buffer))
+
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
   :init-value nil
