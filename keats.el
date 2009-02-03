@@ -171,7 +171,10 @@
   (let ((keat (keats-key-exists key)))
     (cond ((and key keat)
            (setq description (or description (read-string "Description: " (plist-get keat :description))))
-           (plist-put keat :description description)))))
+           (plist-put keat :description description)
+           (print (concat key " updated")))
+          (t
+           (print (concat key " not found"))))))
 
 (defun keats-remove (&optional key)
   "Removes a keat from the list."
