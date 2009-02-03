@@ -260,8 +260,8 @@ and nil will be returned."
       (setq list (cdr list)))
     (not (not list))))
 
-(defun keats-save ()
-  "Saves `keats-list' to `keats-file'."
+(defun keats-write ()
+  "Writes `keats-list' to `keats-file'."
   (interactive)
   (find-file keats-file)
   (delete-region (point-min) (point-max))
@@ -290,7 +290,7 @@ and nil will be returned."
                 (kill-this-buffer)
                 (add-hook 'kill-emacs-hook
                           '(lambda()
-                             (keats-save))))
+                             (keats-write))))
                (t
                 (print "No valid keats file")
                 (setq keats-mode nil))))))
