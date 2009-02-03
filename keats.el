@@ -277,11 +277,23 @@ and nil will be returned."
   (cond (keats-mode
          (cond ((not (keats-file-exists-p))
                 (switch-to-buffer (get-buffer-create keats-temp-buffer))
+                (delete-region (point-min) (point-max))
                 (write-file keats-file nil)
                 (kill-this-buffer)))
-         (unless (keats-file-valid-p)
-           (print "No valid keats file")
-           (setq keats-mode nil)))))
+         (cond ((keats-file-valid-p)
+                (switch-to-buffer (get-buffer-create keats-temp-buffer))
+                (delete-region (point-min) (point-max))
+                (insert-file-contents-literally keats-file)
+                (goto-char (point-min))
+                (while (re-search-forward (concat "^\\(.*\\)" keats-delimiter "\\(.*\\)$") nil t)
+                  (add-to-list 'keats-list `(:key ,(match-string-no-properties 1) :description ,(match-string-no-properties 2))))
+                (kill-this-buffer)
+                (add-hook 'kill-emacs-hook
+                          '(lambda()
+                             (keats-save))))
+               (t
+                (print "No valid keats file")
+                (setq keats-mode nil))))))
 
 (provide 'keats)
 
