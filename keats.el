@@ -187,25 +187,14 @@
           (t
            (print (concat key " not found"))))))
 
-(defun keats-get-description (key)
-  "Returns the description of the given key sequence."
-  (if key
-      (cond ((keats-key-exists key)
-             (let ((list keats-list))
-               (while (and (not (string= (plist-get (car list) :key) key)) list)
-                 (setq list (cdr list)))
-               (when (not (null list))
-                 (plist-get (car list) :description)))))))
-
 (defun keats-print-description (&optional key)
   "Prints the description of the given key sequence."
   (interactive)
   (setq key (or key (keats-read-key)))
-  (if key
-      (let ((res (keats-get-description key)))
-        (if res
-            (print res)
-          (print (concat key " not found"))))))
+  (let ((keat (keats-key-exists key)))
+    (if (and key keat)
+        (print (plist-get keat :description))
+      (print (concat key " not found")))))
 
 (defun keats-search (query)
   "Searches for keats that matches QUERY as description."
