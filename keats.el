@@ -233,6 +233,16 @@
                (dolist (match matches)
                  (insert (concat match "\n"))))))))
 
+(defun keats-write ()
+  "Writes `keats-list' to `keats-file'."
+  (interactive)
+  (find-file keats-file)
+  (delete-region (point-min) (point-max))
+  (dolist (plist keats-list)
+    (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
+  (save-buffer)
+  (kill-this-buffer))
+
 (defun keats-read-key ()
   "Reads a key sequence from the keyboard. To end input, press
 RET and key sequence will be returned. And to abort, press C-g
@@ -260,16 +270,6 @@ and nil will be returned."
     (while (and (not (string= (plist-get (car list) :key) key)) list)
       (setq list (cdr list)))
     (not (not list))))
-
-(defun keats-write ()
-  "Writes `keats-list' to `keats-file'."
-  (interactive)
-  (find-file keats-file)
-  (delete-region (point-min) (point-max))
-  (dolist (plist keats-list)
-    (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
-  (save-buffer)
-  (kill-this-buffer))
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
