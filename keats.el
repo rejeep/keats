@@ -177,25 +177,6 @@
             (t
              (print (concat key " not found"))))))
 
-
-(defun keats-edit (&optional key description)
-  "Edits a keat in `keats-file' if it exists."
-  (interactive)
-  (setq key (or key (keats-read-key)))
-  (let ((line)
-        (pos (keats-find-key-position key))
-        (old-description (keats-get-description key)))
-    (cond ((and key pos)
-           (or description (setq description (read-string "Description: " old-description)))
-           (find-file keats-file)
-           (goto-char pos)
-           (replace-string old-description description nil (line-beginning-position) (line-end-position))
-           (save-buffer)
-           (kill-this-buffer)
-           (print (concat "Updated " key)))
-          (t
-           (print (concat key " not found"))))))
-
 (defun keats-remove (&optional key)
   "Removes the given key sequence from `keats-file'."
   (interactive)
