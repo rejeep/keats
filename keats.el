@@ -196,19 +196,15 @@
            (print (concat key " not found"))))))
 
 (defun keats-get-description (&optional key)
+(defun keats-get-description (key)
   "Returns the description of the given key sequence."
-  (setq key (or key (keats-read-key)))
-  (let ((res)
-        (string)
-        (pos (keats-find-key-position key)))
-    (cond ((and key pos)
-           (find-file keats-file)
-           (goto-char pos)
-           (setq string (buffer-substring (line-beginning-position) (line-end-position)))
-           (string-match (concat "^" key keats-delimiter "\\(.*\\)$") string)
-           (setq res (match-string-no-properties 1 string))
-           (kill-this-buffer)
-           res))))
+  (if key
+      (cond ((keats-key-exists key)
+             (let ((list keats-list))
+               (while (and (not (string= (plist-get (car list) :key) key)) list)
+                 (setq list (cdr list)))
+               (when (not (null list))
+                 (plist-get (car list) :description)))))))
 
 (defun keats-print-description (&optional key)
   "Prints the description of the given key sequence."
