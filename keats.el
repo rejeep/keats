@@ -239,7 +239,7 @@ without auto saving. nil value means no auto saving."
     (cond (matches
            (switch-to-buffer (get-buffer-create keats-temp-buffer))
            (delete-region (point-min) (point-max))
-           (insert "Matches\n")
+           (insert (concat "Matches for: '" query "'\n"))
            (dolist (match matches)
              (insert (concat match "\n")))
            (backward-delete-char 1)
