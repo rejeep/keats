@@ -76,6 +76,13 @@
 ;; have keats in `keats-file'. You then manually have to update the
 ;; delimiter in that file.
 ;;
+;; For each add, edit and delete `keats-save-count' is increased by
+;; one if `keats-save-at' is non nil. When `keats-save-count' is
+;; (larger or) equal to `keats-save-at', `keats-list' is written to
+;; `keats-file'. You can change the value of `keats-save-at' if you
+;; want to write to file more less or often, or not at all. nil value
+;; means to not auto save at all.
+;;
 ;; Many of the commands will prompt you for a key sequence. To enter
 ;; one, start type the sequence and when done press RET (enter). If
 ;; you want to abort, press C-g.
@@ -138,6 +145,10 @@
   "List of plists where each plist is a keat on the form (:key
 \"key\" :description \"description\")")
 
+(defvar keats-save-count 0
+  "Holds the value for how many changes there has been since last
+  save.")
+
 (defcustom keats-file "~/.keats"
   "Path to file where keats are stored."
   :group 'keats)
@@ -148,6 +159,12 @@
   contents in you `keats-file'. If you do this, old keats will
   not be recognized."
   :group 'keats)
+
+(defcustom keats-save-at 5
+  "Tells how many changes (add, edit and remove) there can be
+without auto saving. nil value means no auto saving."
+  :group 'keats)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -163,6 +180,7 @@
             (t
              (setq description (or description (read-string "Description: ")))
              (add-to-list 'keats-list `(:key ,key :description ,description))
+             (keats-update-save)
              (print (concat key " added"))))))
 
 (defun keats-edit (&optional key description)
@@ -173,6 +191,7 @@
     (cond (keat
            (setq description (or description (read-string "Description: " (plist-get keat :description))))
            (plist-put keat :description description)
+           (keats-update-save)
            (print (concat key " updated")))
           (t
            (print (concat key " not found"))))))
@@ -184,6 +203,7 @@
   (let ((keat (keats-key-exists key)))
     (cond (keat
            (setq keats-list (remove keat keats-list))
+           (keats-update-save)
            (print (concat key " removed")))
           (t
            (print (concat key " not found"))))))
@@ -221,7 +241,8 @@
   (dolist (plist keats-list)
     (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
   (save-buffer)
-  (kill-this-buffer))
+  (kill-this-buffer)
+  (setq keats-save-count 0))
 
 (defun keats-read-key ()
   "Reads a key sequence from the keyboard. To end input, press
@@ -255,6 +276,14 @@ and nil will be returned."
         (while (and (not (string= (plist-get (car list) :key) key)) list)
           (setq list (cdr list)))
         (car list))))
+
+(defun keats-update-save ()
+  "First increases the number of updates. Then writes to file is
+there has been enough. But only if `keats-save-at' is non nil."
+  (cond (keats-save-at
+         (setq keats-save-count (1+ keats-save-count))
+         (if (>= keats-save-count keats-save-at)
+             (keats-write)))))
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
