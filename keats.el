@@ -138,6 +138,10 @@
   "List of plists where each plist is a keat on the form (:key
 \"key\" :description \"description\")")
 
+(defvar keats-save-count 0
+  "Holds the value for how many changes there has been since last
+  save.")
+
 (defcustom keats-file "~/.keats"
   "Path to file where keats are stored."
   :group 'keats)
@@ -148,6 +152,12 @@
   contents in you `keats-file'. If you do this, old keats will
   not be recognized."
   :group 'keats)
+
+(defcustom keats-save-at 5
+  "Tells how many changes (add, edit and remove) there can be
+without auto saving. nil value means no auto saving."
+  :group 'keats)
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
