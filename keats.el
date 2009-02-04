@@ -165,6 +165,13 @@
 without auto saving. nil value means no auto saving."
   :group 'keats)
 
+(defface keats-highlight
+  '((((class color) (background light))
+     :background "gray95")
+    (((class color) (background dark))
+     :background "dim gray"))
+  "Face for active line in search."
+  :group 'keats)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -188,13 +195,14 @@ without auto saving. nil value means no auto saving."
   (interactive)
   (setq key (or key (keats-read-key)))
   (let ((keat (keats-key-exists key)))
-    (cond (keat
-           (setq description (or description (read-string "Description: " (plist-get keat :description))))
-           (plist-put keat :description description)
-           (keats-update-save)
-           (print (concat key " updated")))
-          (t
-           (print (concat key " not found"))))))
+    (if key
+        (cond (keat
+               (setq description (or description (read-string "Description: " (plist-get keat :description))))
+               (plist-put keat :description description)
+               (keats-update-save)
+               (print (concat key " updated")))
+              (t
+               (print (concat key " not found")))))))
 
 (defun keats-remove (&optional key)
   "Removes a keat from the list."
@@ -224,14 +232,33 @@ without auto saving. nil value means no auto saving."
     (dolist (keat keats-list)
       (if (string-match query (plist-get keat :description))
           (add-to-list 'matches (keats-to-string keat))))
-    (if matches
-        (if (= (length matches) 1)
-            (print (car matches))
-          (switch-to-buffer (get-buffer-create keats-temp-buffer))
-          (delete-region (point-min) (point-max))
-          (insert "Matches\n")
-          (dolist (match matches)
-            (insert (concat match "\n")))))))
+    (cond (matches
+           (switch-to-buffer (get-buffer-create keats-temp-buffer))
+           (delete-region (point-min) (point-max))
+           (insert "Matches\n")
+           (dolist (match matches)
+             (insert (concat match "\n")))
+           (backward-delete-char 1)
+           (goto-line 2)
+           (goto-char (line-beginning-position))
+           (keats-put-line-property 'face 'keats-highlight)
+           (local-set-key (kbd "n") (lambda ()
+                                      (interactive)
+                                      (keats-put-line-property 'face nil)
+                                      (if (< (line-number-at-pos nil) (count-lines (point-min) (point-max))) (next-line))
+                                      (keats-put-line-property 'face 'keats-highlight)))
+           (local-set-key (kbd "p") (lambda ()
+                                      (interactive)
+                                      (keats-put-line-property 'face nil)
+                                      (if (> (line-number-at-pos nil) 2) (previous-line))
+                                      (keats-put-line-property 'face 'keats-highlight)))
+           (local-set-key (kbd "q") 'kill-this-buffer)
+           (local-set-key (kbd "RET") (lambda ()
+                                        (interactive)
+                                        (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
+                                          (string-match "^\\(.*\\):" line)
+                                          (kill-this-buffer)
+                                          (call-interactively (key-binding (read-kbd-macro (match-string 1 line)))))))))))
 
 (defun keats-write ()
   "Writes `keats-list' to `keats-file'."
@@ -284,6 +311,10 @@ there has been enough changes. But only if `keats-save-at' is non nil."
          (setq keats-save-count (1+ keats-save-count))
          (if (>= keats-save-count keats-save-at)
              (keats-write)))))
+
+(defun keats-put-line-property (prop val)
+  "Changes the face of the current line."
+  (put-text-property (line-beginning-position) (line-end-position) prop val))
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
