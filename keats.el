@@ -76,6 +76,13 @@
 ;; have keats in `keats-file'. You then manually have to update the
 ;; delimiter in that file.
 ;;
+;; For each add, edit and delete `keats-save-count' is increased by
+;; one if `keats-save-at' is non nil. When `keats-save-count' is
+;; (larger or) equal to `keats-save-at', `keats-list' is written to
+;; `keats-file'. You can change the value of `keats-save-at' if you
+;; want to write to file more less or often, or not at all. nil value
+;; means to not auto save at all.
+;;
 ;; Many of the commands will prompt you for a key sequence. To enter
 ;; one, start type the sequence and when done press RET (enter). If
 ;; you want to abort, press C-g.
