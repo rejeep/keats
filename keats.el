@@ -23,7 +23,7 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Vocabulary ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;; Keat - Is a short for Keyboard Shortcut Cheat.
+;; Keat - Is a short for Keybinding Cheat.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
