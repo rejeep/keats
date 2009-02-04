@@ -200,21 +200,18 @@
 (defun keats-search (query)
   "Searches for keats that matches QUERY as description."
   (interactive "*sQuery: ")
-  (let ((matches '()) (key) (description))
-    (dolist (plist keats-list)
-      (setq key (plist-get plist :key))
-      (setq description (plist-get plist :description))
-      (if (string-match query description)
-          (add-to-list 'matches (concat key ": " description))))
+  (let ((matches '()))
+    (dolist (keat keats-list)
+      (if (string-match query (plist-get keat :description))
+          (add-to-list 'matches (keats-to-string keat))))
     (if matches
-        (cond ((= (length matches) 1)
-               (print (car matches)))
-              (t
-               (switch-to-buffer (get-buffer-create keats-temp-buffer))
-               (delete-region (point-min) (point-max))
-               (insert "Matches:\n")
-               (dolist (match matches)
-                 (insert (concat match "\n"))))))))
+        (if (= (length matches) 1)
+            (print (car matches))
+          (switch-to-buffer (get-buffer-create keats-temp-buffer))
+          (delete-region (point-min) (point-max))
+          (insert "Matches\n")
+          (dolist (match matches)
+            (insert (concat match "\n")))))))
 
 (defun keats-write ()
   "Writes `keats-list' to `keats-file'."
