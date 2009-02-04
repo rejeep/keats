@@ -101,7 +101,8 @@
 ;; Removes a keat.
 ;;
 ;; == WRITE (C-c k w)
-;; Writes `keats-list' to file.
+;; Writes `keats-list' to file. This is done every time Emacs is
+;; killed.
 ;;
 ;; Note that even though this might not be a common usage, all of the
 ;; above action can be called from a lisp program:
