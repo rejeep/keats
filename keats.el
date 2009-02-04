@@ -100,9 +100,11 @@
 ;;
 ;; == SEARCH
 ;; Searches regularly, without respect to case, in description for a
-;; keyword. If there is just one hit a message is printed in the
-;; minibuffer. If more than one hit a new buffer containing all hits
-;; is created. If none is found, a message is printed.
+;; given regexp. If none is found, a message is printed. If there's
+;; any hit, a new buffer containing all hits is created. In this
+;; buffer you can use n and p to move up and down between the
+;; different keats. q kills the buffer. And RET calls the function
+;; that the key on the current line responds to interactively.
 ;;
 ;; == REMOVE (C-c k r)
 ;; Removes a keat.
