@@ -66,7 +66,7 @@
 ;;
 ;; You can not however change this to whatever you want. For example a
 ;; whitespace will not work since both a key sequence and a
-;; description may contain whitespaces. Also be aware of that
+;; description may contain white spaces. Also be aware of that
 ;; `keats-delimiter' is used in some regular expressions. This means
 ;; that if you want to use for example a dot (.) as a delimiter, you
 ;; must escape it:
@@ -74,32 +74,37 @@
 ;;
 ;; Note that you can not change the value of this variable when you
 ;; have keats in `keats-file'. You then manually have to update the
-;; delimiter.
+;; delimiter in that file.
 ;;
 ;; Many of the commands will prompt you for a key sequence. To enter
 ;; one, start type the sequence and when done press RET (enter). If
 ;; you want to abort, press C-g.
 ;;
 ;; == ADD (C-c k a)
-;; Will add a new keat if it does not already
-;; exist. If it does exists the edit action will be called with the
-;; same key. Read below under edit.
+;; Will add a new keat if it does not already exist. If it does exists
+;; the edit action will be called with the same key. Read below under
+;; edit.
 ;;
 ;; == EDIT (C-c k e)
 ;; Edits an already existing keat.
 ;;
 ;; == DESCRIPTION (C-c k d)
-;; Print the description for a keat.
+;; Prints the description for a key sequence.
 ;;
 ;; == SEARCH
 ;; Searches regularly, without respect to case, in description for a
-;; keyword. A new buffer containing all hits is created. If none is
-;; found, a message is printed.
+;; keyword. If there is just one hit a message is printed in the
+;; minibuffer. If more than one hit a new buffer containing all hits
+;; is created. If none is found, a message is printed.
 ;;
 ;; == REMOVE (C-c k r)
 ;; Removes a keat.
 ;;
-;; Note that even thought this might not be a common usage, all of the
+;; == WRITE (C-c k w)
+;; Writes `keats-list' to file. This is done every time Emacs is
+;; killed.
+;;
+;; Note that even though this might not be a common usage, all of the
 ;; above action can be called from a lisp program:
 ;; (keats-add "C-x C-f" "Opens file")
 ;; (keats-edit "C-x C-f" "Opens file is a new buffer")
@@ -123,10 +128,15 @@
   (define-key map (kbd "e") 'keats-edit)
   (define-key map (kbd "r") 'keats-remove)
   (define-key map (kbd "d") 'keats-print-description)
-  (define-key map (kbd "s") 'keats-search))
+  (define-key map (kbd "s") 'keats-search)
+  (define-key map (kbd "w") 'keats-write))
 
 (defvar keats-temp-buffer "*keats*"
   "Temp buffer.")
+
+(defvar keats-list '()
+  "List of plists where each plist is a keat on the form (:key
+\"key\" :description \"description\")")
 
 (defcustom keats-file "~/.keats"
   "Path to file where keats are stored."
@@ -142,119 +152,76 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun keats-add (&optional key description)
-  "Adds a keat to `keats-file' if it does not already exist. If
-it exists, `keats-edit' is called if user confirms."
+  "Adds a keat if it does not already exist. If it exists,
+`keats-edit' is called for key if user confirms."
   (interactive)
-  (setq key (keats-key-or-read-key key))
+  (setq key (or key (keats-read-key)))
   (if key
-      (cond ((keats-find-key-position key)
+      (cond ((keats-key-exists key)
              (if (yes-or-no-p "Already exists. Do you want to edit it? ")
                  (keats-edit key)))
             (t
-             (or description (setq description (read-string "Description: ")))
-             (find-file keats-file)
-             (goto-char (point-max))
-             (unless (= (current-column) 0)
-               (let ((next-line-add-newlines t))
-                 (next-line)))
-             (insert (concat key keats-delimiter description))
-             (save-buffer)
-             (kill-this-buffer)
+             (setq description (or description (read-string "Description: ")))
+             (add-to-list 'keats-list `(:key ,key :description ,description))
              (print (concat key " added"))))))
 
 (defun keats-edit (&optional key description)
-  "Edits a keat in `keats-file' if it exists."
+  "Edit the description of an already existing keat."
   (interactive)
-  (setq key (keats-key-or-read-key key))
-  (let ((line)
-        (pos (keats-find-key-position key))
-        (old-description (keats-get-description key)))
-    (cond ((and key pos)
-           (or description (setq description (read-string "Description: " old-description)))
-           (find-file keats-file)
-           (goto-char pos)
-           (replace-string old-description description nil (line-beginning-position) (line-end-position))
-           (save-buffer)
-           (kill-this-buffer)
-           (print (concat "Updated " key)))
+  (setq key (or key (keats-read-key)))
+  (let ((keat (keats-key-exists key)))
+    (cond (keat
+           (setq description (or description (read-string "Description: " (plist-get keat :description))))
+           (plist-put keat :description description)
+           (print (concat key " updated")))
           (t
            (print (concat key " not found"))))))
 
 (defun keats-remove (&optional key)
-  "Removes the given key sequence from `keats-file'."
+  "Removes a keat from the list."
   (interactive)
-  (setq key (keats-key-or-read-key key))
-  (let ((pos (keats-find-key-position key)))
-    (cond ((and key pos (yes-or-no-p (concat "Are you sure you want to remove " key " ? ")))
-           (find-file keats-file)
-           (goto-char pos)
-           (set-mark (point))
-           (let ((next-line-add-newlines t))
-             (next-line))
-           (delete-region (point) (mark))
-           (save-buffer)
-           (kill-this-buffer)
+  (setq key (or key (keats-read-key)))
+  (let ((keat (keats-key-exists key)))
+    (cond (keat
+           (setq keats-list (remove keat keats-list))
            (print (concat key " removed")))
           (t
            (print (concat key " not found"))))))
 
-(defun keats-get-description (&optional key)
-  "Returns the description of the given key sequence."
-  (setq key (keats-key-or-read-key key))
-  (let ((res)
-        (string)
-        (pos (keats-find-key-position key)))
-    (cond ((and key pos)
-           (find-file keats-file)
-           (goto-char pos)
-           (setq string (buffer-substring (line-beginning-position) (line-end-position)))
-           (string-match (concat "^" key keats-delimiter "\\(.*\\)$") string)
-           (setq res (match-string-no-properties 1 string))
-           (kill-this-buffer)
-           res))))
-
 (defun keats-print-description (&optional key)
   "Prints the description of the given key sequence."
   (interactive)
-  (setq key (keats-key-or-read-key key))
-  (let ((res (keats-get-description key)))
-    (if res
-        (print res)
+  (setq key (or key (keats-read-key)))
+  (let ((keat (keats-key-exists key)))
+    (if keat
+        (print (plist-get keat :description))
       (print (concat key " not found")))))
 
 (defun keats-search (query)
-  "Searches in `keats-file' for lines that matches QUERY as
-description."
+  "Searches for keats that matches QUERY as description."
   (interactive "*sQuery: ")
-  (let ((res) (case-fold-search t))
-    (switch-to-buffer (get-buffer-create keats-temp-buffer))
-    (delete-region (point-min) (point-max))
-    (insert-file-contents-literally keats-file)
-    (goto-char (point-min))
-    (setq query (concat "^\\(.*\\)" keats-delimiter "\\(.*" query ".*\\)$"))
-    (while (re-search-forward query nil t)
-      (add-to-list 'res (concat (match-string 1) ": " (match-string 2))))
-    (cond (res
-           (delete-region (point-min) (point-max))
-           (dolist (hit res)
-             (insert (concat hit "\n"))))
-          (t
-           (kill-this-buffer)
-           (print "No matches")))))
+  (let ((matches '()))
+    (dolist (keat keats-list)
+      (if (string-match query (plist-get keat :description))
+          (add-to-list 'matches (keats-to-string keat))))
+    (if matches
+        (if (= (length matches) 1)
+            (print (car matches))
+          (switch-to-buffer (get-buffer-create keats-temp-buffer))
+          (delete-region (point-min) (point-max))
+          (insert "Matches\n")
+          (dolist (match matches)
+            (insert (concat match "\n")))))))
 
-(defun keats-find-key-position (key)
-  "Searches `keats-file' for a keyboard sequence. If the
-  sequence is found, the beginning line position of that line is
-  returned. If there is no match, nil is returned."
-  (switch-to-buffer (get-buffer-create keats-temp-buffer))
+(defun keats-write ()
+  "Writes `keats-list' to `keats-file'."
+  (interactive)
+  (find-file keats-file)
   (delete-region (point-min) (point-max))
-  (insert-file-contents-literally keats-file)
-  (goto-char (point-min))
-  (let ((res))
-    (if (re-search-forward (concat "^" key keats-delimiter ".*$") nil t)
-        (setq res (line-beginning-position)))
-    (kill-this-buffer)
-    res))
+  (dolist (plist keats-list)
+    (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
+  (save-buffer)
+  (kill-this-buffer))
 
 (defun keats-read-key ()
   "Reads a key sequence from the keyboard. To end input, press
@@ -269,6 +236,10 @@ and nil will be returned."
         (unless (string= (key-description res) "")
           (key-description res)))))
 
+(defun keats-to-string (keat)
+  "Returns a string representation of a keat."
+  (concat (plist-get keat :key) ": " (plist-get keat :description)))
+
 (defun keats-file-exists-p ()
   "Returns true if keats file exists. False otherwise."
   (and (file-exists-p keats-file) (not (file-directory-p keats-file))))
@@ -277,11 +248,13 @@ and nil will be returned."
   "Returns true if keats file is valid (read and writable). False otherwise."
   (and (file-readable-p keats-file) (file-writable-p keats-file)))
 
-(defun keats-key-or-read-key (key)
-  "If KEY is non-nil, KEY is returned. Otherwise a key sequence
-is read."
-  (or key (setq key (keats-read-key)))
-  key)
+(defun keats-key-exists (key)
+  "Returns t if key exists. False otherwise."
+  (if key
+      (let ((list keats-list))
+        (while (and (not (string= (plist-get (car list) :key) key)) list)
+          (setq list (cdr list)))
+        (car list))))
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
@@ -290,8 +263,20 @@ is read."
   (cond (keats-mode
          (cond ((not (keats-file-exists-p))
                 (switch-to-buffer (get-buffer-create keats-temp-buffer))
+                (delete-region (point-min) (point-max))
                 (write-file keats-file nil)
                 (kill-this-buffer)))
+         (cond ((keats-file-valid-p)
+                (switch-to-buffer (get-buffer-create keats-temp-buffer))
+                (delete-region (point-min) (point-max))
+                (insert-file-contents-literally keats-file)
+                (goto-char (point-min))
+                (while (re-search-forward (concat "^\\(.*\\)" keats-delimiter "\\(.*\\)$") nil t)
+                  (add-to-list 'keats-list `(:key ,(match-string-no-properties 1) :description ,(match-string-no-properties 2))))
+                (kill-this-buffer)
+                (add-hook 'kill-emacs-hook
+                          '(lambda()
+                             (keats-write)))))
          (unless (keats-file-valid-p)
            (error "No valid keats file")))))
 
