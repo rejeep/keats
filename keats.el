@@ -259,10 +259,14 @@ without auto saving. nil value means no auto saving."
            (local-set-key (kbd "q") 'kill-this-buffer)
            (local-set-key (kbd "RET") (lambda ()
                                         (interactive)
-                                        (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
+                                        (let ((line (buffer-substring (line-beginning-position) (line-end-position))) (function))
                                           (string-match "^\\(.*\\):" line)
-                                          (kill-this-buffer)
-                                          (call-interactively (key-binding (read-kbd-macro (match-string 1 line)))))))))))
+                                          (setq function (key-binding (read-kbd-macro (match-string 1 line))))
+                                          (cond (function
+                                                 (kill-this-buffer)
+                                                 (call-interactively function))
+                                                (t
+                                                 (print "Key runs no command"))))))))))
 
 (defun keats-write ()
   "Writes `keats-list' to `keats-file'."
