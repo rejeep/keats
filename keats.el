@@ -278,8 +278,8 @@ and nil will be returned."
         (car list))))
 
 (defun keats-update-save ()
-  "First increases the number of updates. Then writes to file is
-there has been enough. But only if `keats-save-at' is non nil."
+  "First increases the number of updates. Then writes to file if
+there has been enough changes. But only if `keats-save-at' is non nil."
   (cond (keats-save-at
          (setq keats-save-count (1+ keats-save-count))
          (if (>= keats-save-count keats-save-at)
