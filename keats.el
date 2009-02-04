@@ -239,6 +239,10 @@ and nil will be returned."
         (unless (string= (key-description res) "")
           (key-description res)))))
 
+(defun keats-to-string (keat)
+  "Returns a string representation of a keat."
+  (concat (plist-get keat :key) ": " (plist-get keat :description)))
+
 (defun keats-file-exists-p ()
   "Returns true if keats file exists. False otherwise."
   (and (file-exists-p keats-file) (not (file-directory-p keats-file))))
