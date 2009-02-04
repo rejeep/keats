@@ -231,7 +231,8 @@ without auto saving. nil value means no auto saving."
   (dolist (plist keats-list)
     (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
   (save-buffer)
-  (kill-this-buffer))
+  (kill-this-buffer)
+  (setq keats-save-count 0))
 
 (defun keats-read-key ()
   "Reads a key sequence from the keyboard. To end input, press
