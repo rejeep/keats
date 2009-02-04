@@ -267,6 +267,14 @@ and nil will be returned."
           (setq list (cdr list)))
         (car list))))
 
+(defun keats-update-save ()
+  "First increases the number of updates. Then writes to file is
+there has been enough. But only if `keats-save-at' is non nil."
+  (cond (keats-save-at
+         (setq keats-save-count (1+ keats-save-count))
+         (if (>= keats-save-count keats-save-at)
+             (keats-write)))))
+
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
   :init-value nil
