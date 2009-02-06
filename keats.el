@@ -309,10 +309,7 @@ without auto saving. nil value means no auto saving."
                                        (t
                                         (message "%s runs no command" key))))))
 
-  (local-set-key (kbd "w") (lambda ()
-                             (interactive)
-                             (keats-write)))
-
+  (local-set-key (kbd "w") 'keats-write)
   (local-set-key (kbd "q") 'kill-this-buffer)
 
   (insert title)
