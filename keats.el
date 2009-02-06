@@ -105,19 +105,6 @@
 ;; Writes `keats-list' to file. This is done every time Emacs is
 ;; killed.
 ;;
-;; == INTERACTIVE (C-c k i)
-;; Will open a new buffer with all keats. This buffer is interactive
-;; in that way that it binds some keys so that it's easy to work with
-;; the keats. These keybindings are added:
-;;  * a - Calls keats-add
-;;  * e - Calls keats-edit
-;;  * r - Calls keast-remove
-;;  * n - Goes to next keat
-;;  * p - Goes to previous keat
-;;  * RET - Executes command for which keat is connected to
-;;  * w - Calls keats-write
-;;  * q - Exits the interactive buffer
-;;
 ;; == SEARCH
 ;; Searches regularly, without respect to case, in description for a
 ;; given regexp. If none is found, a message is printed. If there's at
@@ -180,21 +167,6 @@
 without auto saving. nil value means no auto saving."
   :group 'keats)
 
-(defface keats-title
-  '((((class color) (background dark))
-     :foreground "red"
-     :bold t))
-  "Face for title in interactive mode."
-  :group 'keats)
-
-(defface keats-highlight
-  '((((class color) (background light))
-     :background "gray95")
-    (((class color) (background dark))
-     :background "dim gray"))
-  "Face for active line in interactive mode."
-  :group 'keats)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun keats-add (&optional key description)
@@ -253,81 +225,6 @@ without auto saving. nil value means no auto saving."
             (message (plist-get keat :description))
           (message "%s not found" key)))))
 
-(defun keats-interactive-do (title function)
-  "Will open a interactive buffer."
-  (switch-to-buffer (get-buffer-create keats-temp-buffer))
-  (delete-region (point-min) (point-max))
-
-  (local-set-key (kbd "a") (lambda ()
-                             (interactive)
-                             (save-excursion
-                               (let* ((key (keats-read-key))
-                                      (keat (keats-key-exists key)))
-                                 (cond (keat
-                                        (message "%s already exists. Edit instead." key))
-                                       (t
-                                        (cond ((keats-add key)
-                                               (goto-char (point-max))
-                                               (unless (= (current-column) 0)
-                                                 (insert "\n"))
-                                               (insert (keats-to-string (car (last keats-list))))))))))
-                             (keats-put-line-property 'face 'keats-highlight)))
-
-  (local-set-key (kbd "e") (lambda ()
-                             (interactive)
-                             (save-excursion
-                               (let* ((key (keats-key-at-point))
-                                      (keat (keats-key-exists key)))
-                                 (cond (keat
-                                        (cond ((keats-edit key)
-                                               (delete-region (line-beginning-position) (line-end-position))
-                                               (insert (keats-to-string keat))))))))
-                             (keats-put-line-property 'face 'keats-highlight)))
-
-  (local-set-key (kbd "r") (lambda ()
-                             (interactive)
-                             (cond ((keats-remove (keats-key-at-point))
-                                    (delete-region (line-beginning-position) (line-end-position))
-                                    (delete-char 1)
-                                    (keats-put-line-property 'face 'keats-highlight)))))
-
-  (local-set-key (kbd "n") (lambda ()
-                             (interactive)
-                             (keats-put-line-property 'face nil)
-                             (if (< (line-number-at-pos nil) (count-lines (point-min) (point-max)))
-                                 (next-line))
-                             (keats-put-line-property 'face 'keats-highlight)))
-
-  (local-set-key (kbd "p") (lambda ()
-                             (interactive)
-                             (keats-put-line-property 'face nil)
-                             (if (> (line-number-at-pos nil) 2)
-                                 (previous-line))
-                             (keats-put-line-property 'face 'keats-highlight)))
-
-  (local-set-key (kbd "RET") (lambda ()
-                               (interactive)
-                               (let* ((key (keats-key-at-point))
-                                      (function (key-binding (read-kbd-macro key))))
-                                 (cond (function
-                                        (kill-this-buffer)
-                                        (call-interactively function))
-                                       (t
-                                        (message "%s runs no command" key))))))
-
-  (local-set-key (kbd "w") 'keats-write)
-  (local-set-key (kbd "q") 'kill-this-buffer)
-
-  (insert title)
-  (keats-put-line-property 'face 'keats-title)
-  (newline)
-  (funcall function)
-  (cond ((> (count-lines (point-min) (point-max)) 1)
-         (backward-delete-char 1)
-         (goto-line 2)
-         (goto-char (line-beginning-position))
-         (keats-put-line-property 'face 'keats-highlight))))
-
 (defun keats-search (query)
   "Searches for keats that matches QUERY as description."
   (interactive "*sQuery: ")
@@ -377,16 +274,6 @@ and nil will be returned."
     (if (string= (key-description key) "RET")
         (unless (string= (key-description res) "")
           (key-description res)))))
-
-(defun keats-key-at-point ()
-  "Returns key at point in keats interactive mode."
-  (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
-    (string-match "^\\(.*\\):" line)
-    (match-string-no-properties 1 line)))
-
-(defun keats-put-line-property (prop val)
-  "Changes the face of the current line."
-  (put-text-property (line-beginning-position) (line-end-position) prop val))
 
 (defun keats-to-string (keat)
   "Returns a string representation of a keat."
