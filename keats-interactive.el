@@ -144,7 +144,7 @@
   (goto-char (point-min))
   (delete-region (line-beginning-position) (line-end-position))
   (insert title)
-  (keats-put-line-property 'face 'keats-title)
+  (keats-interactive-put-line-property 'face 'keats-title)
   (newline))
 
 (defun keats-interactive-mode (title)
