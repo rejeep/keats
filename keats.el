@@ -242,7 +242,7 @@ without auto saving. nil value means no auto saving."
           (message "%s not found" key)))))
 
 (defun keats-interactive-do (title function)
-  ""
+  "Will open a interactive buffer."
   (switch-to-buffer (get-buffer-create keats-temp-buffer))
   (delete-region (point-min) (point-max))
 
