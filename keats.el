@@ -275,8 +275,7 @@ without auto saving. nil value means no auto saving."
                                  (cond (keat
                                         (cond ((keats-edit key)
                                                (delete-region (line-beginning-position) (line-end-position))
-                                               (insert (keats-to-string keat))
-                                               (keats-put-line-property 'face 'keats-highlight)))))))))
+                                               (insert (keats-to-string keat))))))))))
 
   (local-set-key (kbd "r") (lambda ()
                              (interactive)
@@ -319,10 +318,11 @@ without auto saving. nil value means no auto saving."
   (keats-put-line-property 'face 'keats-title)
   (newline)
   (funcall function)
-  (backward-delete-char 1)
-  (goto-line 2)
-  (goto-char (line-beginning-position))
-  (keats-put-line-property 'face 'keats-highlight))
+  (cond ((> (count-lines (point-min) (point-max) 1))
+         (backward-delete-char 1)
+         (goto-line 2)
+         (goto-char (line-beginning-position))
+         (keats-put-line-property 'face 'keats-highlight))))
 
 (defun keats-search (query)
   "Searches for keats that matches QUERY as description."
