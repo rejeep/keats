@@ -188,9 +188,10 @@ without auto saving. nil value means no auto saving."
                  (keats-edit key)))
             (t
              (setq description (or description (read-string "Description: ")))
-             (add-to-list 'keats-list `(:key ,key :description ,description))
-             (keats-update-save)
-             (message "%s added" key)))))
+             (cond (description
+                    (add-to-list 'keats-list `(:key ,key :description ,description) t)
+                    (keats-update-save)
+                    (message "%s added" key)))))))
 
 (defun keats-edit (&optional key description)
   "Edit the description of an already existing keat."
