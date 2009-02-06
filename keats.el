@@ -220,7 +220,8 @@ without auto saving. nil value means no auto saving."
                (keats-update-save)
                (message "%s removed" key))
               (t
-               (message "%s not found" key))))))
+               (message "%s not found" key)
+               nil)))))
 
 (defun keats-print-description (&optional key)
   "Prints the description of the given key sequence."
