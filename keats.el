@@ -201,9 +201,10 @@ without auto saving. nil value means no auto saving."
       (let ((keat (keats-key-exists key)))
         (cond (keat
                (setq description (or description (read-string "Description: " (plist-get keat :description))))
-               (plist-put keat :description description)
-               (keats-update-save)
-               (message "%s updated" key))
+               (cond (description
+                      (plist-put keat :description description)
+                      (keats-update-save)
+                      (message "%s updated" key))))
               (t
                (message "%s not found" key))))))
 
