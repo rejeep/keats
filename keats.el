@@ -275,7 +275,8 @@ without auto saving. nil value means no auto saving."
                                  (cond (keat
                                         (cond ((keats-edit key)
                                                (delete-region (line-beginning-position) (line-end-position))
-                                               (insert (keats-to-string keat))))))))))
+                                               (insert (keats-to-string keat))))))))
+                             (keats-put-line-property 'face 'keats-highlight)))
 
   (local-set-key (kbd "r") (lambda ()
                              (interactive)
