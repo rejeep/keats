@@ -184,7 +184,7 @@ without auto saving. nil value means no auto saving."
   (setq key (or key (keats-read-key)))
   (if key
       (cond ((keats-key-exists key)
-             (if (yes-or-no-p "Already exists. Do you want to edit it? ")
+             (if (yes-or-no-p (concat key " already exists. Do you want to edit it? "))
                  (keats-edit key)))
             (t
              (setq description (or description (read-string "Description: ")))
