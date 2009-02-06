@@ -112,9 +112,9 @@
   )
 
 (defun keats-interactive-quit ()
-  ""
+  "Exits mode by closing buffer."
   (interactive)
-  )
+  (kill-this-buffer))
 
 (defun keats-interactive-write ()
   "Writes keats to file."
