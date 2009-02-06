@@ -56,6 +56,9 @@
 (defconst keats-interactive-temp-buffer "*Keats Interactive*"
   "Temp buffer.")
 
+(defvar keast-interactive-mode-hook '()
+  "Hook for this mode. Is evaluated last in mode startup.")
+
 (defvar keats-interactive-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "a" 'keats-interactive-add)
@@ -142,7 +145,8 @@
   (use-local-map keats-interactive-mode-map)
   (setq mode-name "Keats Interactive")
   (setq major-mode 'keats-interactive-mode)
-  (keats-interactive-set-title title))
+  (keats-interactive-set-title title)
+  (run-mode-hooks 'keast-interactive-mode-hook))
 
 (provide 'keats-interactive)
 
