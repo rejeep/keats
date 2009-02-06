@@ -128,6 +128,13 @@
   ""
   (interactive)
   )
+
+(defun keats-interactive-key-at-point ()
+  "Returns key at point."
+  (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
+    (string-match "^\\(.*\\):" line)
+    (match-string-no-properties 1 line)))
+
 (defun keats-interactive-set-title (title)
   "Sets the title."
   (goto-char (point-min))
