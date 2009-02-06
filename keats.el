@@ -246,17 +246,6 @@ without auto saving. nil value means no auto saving."
   (switch-to-buffer (get-buffer-create keats-temp-buffer))
   (delete-region (point-min) (point-max))
 
-  ;; Eval on compile?
-  (defun keats-key-at-point ()
-    "Returns key at point in keats interactive mode."
-    (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
-      (string-match "^\\(.*\\):" line)
-      (match-string-no-properties 1 line)))
-
-  (defun keats-put-line-property (prop val)
-    "Changes the face of the current line."
-    (put-text-property (line-beginning-position) (line-end-position) prop val))
-
   (local-set-key (kbd "a") (lambda ()
                              (interactive)
                              (save-excursion
@@ -371,6 +360,16 @@ and nil will be returned."
     (if (string= (key-description key) "RET")
         (unless (string= (key-description res) "")
           (key-description res)))))
+
+(defun keats-key-at-point ()
+  "Returns key at point in keats interactive mode."
+  (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
+    (string-match "^\\(.*\\):" line)
+    (match-string-no-properties 1 line)))
+
+(defun keats-put-line-property (prop val)
+  "Changes the face of the current line."
+  (put-text-property (line-beginning-position) (line-end-position) prop val))
 
 (defun keats-to-string (keat)
   "Returns a string representation of a keat."
