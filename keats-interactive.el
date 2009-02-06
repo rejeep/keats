@@ -56,6 +56,10 @@
 (defconst keats-interactive-temp-buffer "*Keats Interactive*"
   "Temp buffer.")
 
+(defvar keats-interactive-title-height nil
+  "We must know how high the title is so that we don't enter it's
+  area.")
+
 (defvar keats-interactive-mode-hook '()
   "Hook for this mode. Is evaluated last in mode startup.")
 
@@ -141,16 +145,18 @@
     (string-match "^\\(.*\\):" line)
     (match-string-no-properties 1 line)))
 
-(defun keats-interactive-put-line-property (prop val)
+(defun keats-interactive-put-line-property (prop val &optional beg end)
   "Changes the face of the current line."
-  (put-text-property (line-beginning-position) (line-end-position) prop val))
+  (put-text-property (or beg (line-beginning-position)) (or end (line-end-position)) prop val))
 
 (defun keats-interactive-set-title (title)
   "Sets the title."
   (goto-char (point-min))
   (delete-region (line-beginning-position) (line-end-position))
   (insert title)
-  (keats-interactive-put-line-property 'face 'keats-title)
+  (let ((min (point-min)) (max (point-max)))
+    (setq keats-interactive-title-height (count-lines min max))
+    (keats-interactive-put-line-property 'face 'keats-title min max))
   (newline))
 
 (defun keats-interactive-mode (title)
