@@ -53,4 +53,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(provide 'keats-interactive)
+
 ;;; keats.el ends here
