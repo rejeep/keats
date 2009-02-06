@@ -1,4 +1,4 @@
-;;; keats-interactive.el --- 
+;;; keats-interactive.el --- Interactive mode for Keats mode.
 
 ;; Copyright 2008  Johan Andersson
 
