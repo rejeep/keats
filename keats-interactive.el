@@ -61,14 +61,14 @@
 
 (defvar keats-interactive-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "a" 'keats-interactive-add)
-    (define-key map "e" 'keats-interactive-edit)
-    (define-key map "r" 'keats-interactive-remove)
-    (define-key map "n" 'keats-interactive-next)
-    (define-key map "p" 'keats-interactive-previous)
-    (define-key map "q" 'keats-interactive-quit)
-    (define-key map "w" 'keats-interactive-write)
-    (define-key map "RET" 'keats-interactive-run)
+    (define-key map (kbd "a") 'keats-interactive-add)
+    (define-key map (kbd "e") 'keats-interactive-edit)
+    (define-key map (kbd "r") 'keats-interactive-remove)
+    (define-key map (kbd "n") 'keats-interactive-next)
+    (define-key map (kbd "p") 'keats-interactive-previous)
+    (define-key map (kbd "q") 'keats-interactive-quit)
+    (define-key map (kbd "w") 'keats-interactive-write)
+    (define-key map (kbd "RET") 'keats-interactive-run)
     map)
   "Keymap for `keats-interactive-mode'.")
 
