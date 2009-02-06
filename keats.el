@@ -271,7 +271,7 @@ without auto saving. nil value means no auto saving."
 (defun keats-write ()
   "Writes `keats-list' to `keats-file'."
   (interactive)
-  (find-file keats-file)
+  (find-file-literally keats-file)
   (delete-region (point-min) (point-max))
   (dolist (plist keats-list)
     (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
@@ -337,7 +337,7 @@ there has been enough changes. But only if `keats-save-at' is non nil."
          (cond ((keats-file-valid-p)
                 (switch-to-buffer (get-buffer-create keats-temp-buffer))
                 (delete-region (point-min) (point-max))
-                (insert-file-contents-literally keats-file)
+                (insert-file keats-file)
                 (goto-char (point-min))
                 (while (re-search-forward (concat "^\\(.*\\)" keats-delimiter "\\(.*\\)$") nil t)
                   (add-to-list 'keats-list `(:key ,(match-string-no-properties 1) :description ,(match-string-no-properties 2))))
