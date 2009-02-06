@@ -286,7 +286,7 @@ and nil will be returned."
   (let ((cursor-in-echo-area t) (key) (res))
     (setq key (read-key-sequence "Describe key: "))
     (while (not (string-match "RET\\|C-g" (key-description key)))
-      (setq res (concat res key))
+      (setq res (vconcat res key))
       (setq key (read-key-sequence (key-description res))))
     (if (string= (key-description key) "RET")
         (unless (string= (key-description res) "")
