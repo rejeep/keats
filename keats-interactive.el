@@ -86,6 +86,45 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun keats-interactive-add ()
+  ""
+  (interactive)
+  )
+
+(defun keats-interactive-edit ()
+  ""
+  (interactive)
+  )
+
+(defun keats-interactive-remove ()
+  ""
+  (interactive)
+  )
+
+(defun keats-interactive-next ()
+  ""
+  (interactive)
+  )
+
+(defun keats-interactive-previous ()
+  ""
+  (interactive)
+  )
+
+(defun keats-interactive-quit ()
+  ""
+  (interactive)
+  )
+
+(defun keats-interactive-write ()
+  ""
+  (interactive)
+  )
+
+(defun keats-interactive-run ()
+  ""
+  (interactive)
+  )
 (defun keats-interactive-set-title (title)
   "Sets the title."
   (goto-char (point-min))
