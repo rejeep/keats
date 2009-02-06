@@ -53,6 +53,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defconst keats-interactive-temp-buffer "*Keats Interactive*"
+  "Temp buffer.")
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'keats-interactive)
