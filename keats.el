@@ -260,11 +260,16 @@ without auto saving. nil value means no auto saving."
   (local-set-key (kbd "a") (lambda ()
                              (interactive)
                              (save-excursion
-                               (cond ((keats-add)
-                                      (goto-char (point-max))
-                                      (unless (= (current-column) 0)
-                                        (insert "\n"))
-                                      (insert (keats-to-string (car (last keats-list)))))))
+                               (let* ((key (keats-read-key))
+                                      (keat (keats-key-exists key)))
+                                 (cond (keat
+                                        (message "%s already exists. Edit instead." key))
+                                       (t
+                                        (cond ((keats-add key)
+                                               (goto-char (point-max))
+                                               (unless (= (current-column) 0)
+                                                 (insert "\n"))
+                                               (insert (keats-to-string (car (last keats-list))))))))))
                              (keats-put-line-property 'face 'keats-highlight)))
 
   (local-set-key (kbd "e") (lambda ()
