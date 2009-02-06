@@ -68,6 +68,22 @@
     (define-key map "RET" 'keats-interactive-run)
     map)
   "Keymap for `keats-interactive-mode'.")
+
+(defface keats-title
+  '((((class color) (background dark))
+     :foreground "red"
+     :bold t))
+  "Face for title."
+  :group 'keats)
+
+(defface keats-highlight
+  '((((class color) (background light))
+     :background "gray95")
+    (((class color) (background dark))
+     :background "dim gray"))
+  "Face for active line."
+  :group 'keats)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'keats-interactive)
