@@ -262,8 +262,10 @@ without auto saving. nil value means no auto saving."
                              (save-excursion
                                (cond ((keats-add)
                                       (goto-char (point-max))
-                                      (newline)
-                                      (insert (keats-to-string (car (last keats-list)))))))))
+                                      (unless (= (current-column) 0)
+                                        (insert "\n"))
+                                      (insert (keats-to-string (car (last keats-list)))))))
+                             (keats-put-line-property 'face 'keats-highlight)))
 
   (local-set-key (kbd "e") (lambda ()
                              (interactive)
