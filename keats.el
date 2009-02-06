@@ -284,10 +284,10 @@ without auto saving. nil value means no auto saving."
 RET and key sequence will be returned. And to abort, press C-g
 and nil will be returned."
   (let ((cursor-in-echo-area t) (key) (res))
-    (setq key (read-key-sequence "Describe key: "))
+    (setq key (read-key-sequence-vector "Describe key: "))
     (while (not (string-match "RET\\|C-g" (key-description key)))
       (setq res (vconcat res key))
-      (setq key (read-key-sequence (key-description res))))
+      (setq key (read-key-sequence-vector (key-description res))))
     (if (string= (key-description key) "RET")
         (unless (string= (key-description res) "")
           (key-description res)))))
