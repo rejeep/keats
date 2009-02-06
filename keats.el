@@ -190,7 +190,7 @@ without auto saving. nil value means no auto saving."
              (setq description (or description (read-string "Description: ")))
              (add-to-list 'keats-list `(:key ,key :description ,description))
              (keats-update-save)
-             (print (concat key " added"))))))
+             (message "%s added" key)))))
 
 (defun keats-edit (&optional key description)
   "Edit the description of an already existing keat."
@@ -202,9 +202,9 @@ without auto saving. nil value means no auto saving."
                (setq description (or description (read-string "Description: " (plist-get keat :description))))
                (plist-put keat :description description)
                (keats-update-save)
-               (print (concat key " updated")))
+               (message "%s updated" key))
               (t
-               (print (concat key " not found")))))))
+               (message "%s not found" key))))))
 
 (defun keats-remove (&optional key)
   "Removes a keat from the list."
@@ -215,9 +215,9 @@ without auto saving. nil value means no auto saving."
         (cond (keat
                (setq keats-list (remove keat keats-list))
                (keats-update-save)
-               (print (concat key " removed")))
+               (message "%s removed" key))
               (t
-               (print (concat key " not found")))))))
+               (message "%s not found" key))))))
 
 (defun keats-print-description (&optional key)
   "Prints the description of the given key sequence."
@@ -226,8 +226,8 @@ without auto saving. nil value means no auto saving."
   (if key
       (let ((keat (keats-key-exists key)))
         (if keat
-            (print (plist-get keat :description))
-          (print (concat key " not found"))))))
+            (message (plist-get keat :description))
+          (message "%s not found" key)))))
 
 (defun keats-search (query)
   "Searches for keats that matches QUERY as description."
