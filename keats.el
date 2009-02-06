@@ -138,7 +138,8 @@
   (define-key map (kbd "r") 'keats-remove)
   (define-key map (kbd "d") 'keats-print-description)
   (define-key map (kbd "s") 'keats-search)
-  (define-key map (kbd "w") 'keats-write))
+  (define-key map (kbd "w") 'keats-write)
+  (define-key map (kbd "i") 'keats-interactive))
 
 (defvar keats-temp-buffer "*keats*"
   "Temp buffer.")
@@ -167,12 +168,19 @@
 without auto saving. nil value means no auto saving."
   :group 'keats)
 
+(defface keats-title
+  '((((class color) (background dark))
+     :foreground "red"
+     :bold t))
+  "Face for title in interactive mode."
+  :group 'keats)
+
 (defface keats-highlight
   '((((class color) (background light))
      :background "gray95")
     (((class color) (background dark))
      :background "dim gray"))
-  "Face for active line in search."
+  "Face for active line in interactive mode."
   :group 'keats)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -233,44 +241,112 @@ without auto saving. nil value means no auto saving."
             (message (plist-get keat :description))
           (message "%s not found" key)))))
 
+(defun keats-interactive-do (title function)
+  ""
+  (switch-to-buffer (get-buffer-create keats-temp-buffer))
+  (delete-region (point-min) (point-max))
+
+  ;; Eval on compile?
+  (defun keats-key-at-point ()
+    "Returns key at point in keats interactive mode."
+    (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
+      (string-match "^\\(.*\\):" line)
+      (match-string-no-properties 1 line)))
+
+  (defun keats-put-line-property (prop val)
+    "Changes the face of the current line."
+    (put-text-property (line-beginning-position) (line-end-position) prop val))
+
+  (local-set-key (kbd "a") (lambda ()
+                             (interactive)
+                             (save-excursion
+                               (cond ((keats-add)
+                                      (goto-char (point-max))
+                                      (newline)
+                                      (insert (keats-to-string (car (last keats-list)))))))))
+
+  (local-set-key (kbd "e") (lambda ()
+                             (interactive)
+                             (save-excursion
+                               (let* ((key (keats-key-at-point))
+                                      (keat (keats-key-exists key)))
+                                 (cond (keat
+                                        (cond ((keats-edit key)
+                                               (delete-region (line-beginning-position) (line-end-position))
+                                               (insert (keats-to-string keat))
+                                               (keats-put-line-property 'face 'keats-highlight)))))))))
+
+  (local-set-key (kbd "r") (lambda ()
+                             (interactive)
+                             (cond ((keats-remove (keats-key-at-point))
+                                    (delete-region (line-beginning-position) (line-end-position))
+                                    (delete-char 1)
+                                    (keats-put-line-property 'face 'keats-highlight)))))
+
+  (local-set-key (kbd "n") (lambda ()
+                             (interactive)
+                             (keats-put-line-property 'face nil)
+                             (if (< (line-number-at-pos nil) (count-lines (point-min) (point-max)))
+                                 (next-line))
+                             (keats-put-line-property 'face 'keats-highlight)))
+
+  (local-set-key (kbd "p") (lambda ()
+                             (interactive)
+                             (keats-put-line-property 'face nil)
+                             (if (> (line-number-at-pos nil) 2)
+                                 (previous-line))
+                             (keats-put-line-property 'face 'keats-highlight)))
+
+  (local-set-key (kbd "RET") (lambda ()
+                               (interactive)
+                               (let* ((key (keats-key-at-point))
+                                      (function (key-binding (read-kbd-macro key))))
+                                 (cond (function
+                                        (kill-this-buffer)
+                                        (call-interactively function))
+                                       (t
+                                        (message "%s runs no command" key))))))
+
+  (local-set-key (kbd "w") (lambda ()
+                             (interactive)
+                             (keats-write)))
+
+  (local-set-key (kbd "q") 'kill-this-buffer)
+
+  (insert title)
+  (keats-put-line-property 'face 'keats-title)
+  (newline)
+  (funcall function)
+  (backward-delete-char 1)
+  (goto-line 2)
+  (goto-char (line-beginning-position))
+  (keats-put-line-property 'face 'keats-highlight))
+
 (defun keats-search (query)
   "Searches for keats that matches QUERY as description."
   (interactive "*sQuery: ")
   (let ((matches '()))
     (dolist (keat keats-list)
       (if (string-match query (plist-get keat :description))
-          (add-to-list 'matches (keats-to-string keat))))
+          (add-to-list 'matches keat)))
     (cond (matches
-           (switch-to-buffer (get-buffer-create keats-temp-buffer))
-           (delete-region (point-min) (point-max))
-           (insert (concat "Matches for: '" query "'\n"))
-           (dolist (match matches)
-             (insert (concat match "\n")))
-           (backward-delete-char 1)
-           (goto-line 2)
-           (goto-char (line-beginning-position))
-           (keats-put-line-property 'face 'keats-highlight)
-           (local-set-key (kbd "n") (lambda ()
-                                      (interactive)
-                                      (keats-put-line-property 'face nil)
-                                      (if (< (line-number-at-pos nil) (count-lines (point-min) (point-max))) (next-line))
-                                      (keats-put-line-property 'face 'keats-highlight)))
-           (local-set-key (kbd "p") (lambda ()
-                                      (interactive)
-                                      (keats-put-line-property 'face nil)
-                                      (if (> (line-number-at-pos nil) 2) (previous-line))
-                                      (keats-put-line-property 'face 'keats-highlight)))
-           (local-set-key (kbd "q") 'kill-this-buffer)
-           (local-set-key (kbd "RET") (lambda ()
-                                        (interactive)
-                                        (let ((line (buffer-substring (line-beginning-position) (line-end-position))) (function))
-                                          (string-match "^\\(.*\\):" line)
-                                          (setq function (key-binding (read-kbd-macro (match-string 1 line))))
-                                          (cond (function
-                                                 (kill-this-buffer)
-                                                 (call-interactively function))
-                                                (t
-                                                 (print "Key runs no command"))))))))))
+           (keats-interactive-do
+            (concat "Matches for: '" query "'")
+            (lambda ()
+              (dolist (match matches)
+                (insert (keats-to-string match))
+                (newline)))))
+          (t
+           (message "No matches for %s" query)))))
+
+(defun keats-interactive ()
+  "Enters keats interactive mode with all keats."
+  (interactive)
+  (keats-interactive-do
+   "Keats"
+   (lambda ()
+     (dolist (keat keats-list)
+       (insert (concat (keats-to-string keat) "\n"))))))
 
 (defun keats-write ()
   "Writes `keats-list' to `keats-file'."
@@ -323,10 +399,6 @@ there has been enough changes. But only if `keats-save-at' is non nil."
          (setq keats-save-count (1+ keats-save-count))
          (if (>= keats-save-count keats-save-at)
              (keats-write)))))
-
-(defun keats-put-line-property (prop val)
-  "Changes the face of the current line."
-  (put-text-property (line-beginning-position) (line-end-position) prop val))
 
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
