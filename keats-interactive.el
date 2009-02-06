@@ -56,6 +56,18 @@
 (defconst keats-interactive-temp-buffer "*Keats Interactive*"
   "Temp buffer.")
 
+(defvar keats-interactive-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "a" 'keats-interactive-add)
+    (define-key map "e" 'keats-interactive-edit)
+    (define-key map "r" 'keats-interactive-remove)
+    (define-key map "n" 'keats-interactive-next)
+    (define-key map "p" 'keats-interactive-previous)
+    (define-key map "q" 'keats-interactive-quit)
+    (define-key map "w" 'keats-interactive-write)
+    (define-key map "RET" 'keats-interactive-run)
+    map)
+  "Keymap for `keats-interactive-mode'.")
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (provide 'keats-interactive)
