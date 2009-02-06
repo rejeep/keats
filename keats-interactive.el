@@ -86,6 +86,14 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun keats-interactive-set-title (title)
+  "Sets the title."
+  (goto-char (point-min))
+  (delete-region (line-beginning-position) (line-end-position))
+  (insert title)
+  (keats-put-line-property 'face 'keats-title)
+  (newline))
+
 (defun keats-interactive-mode (title)
   "Major mode to interactively manage Keats."
   (interactive "*sTitle: ")
