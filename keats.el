@@ -318,7 +318,7 @@ without auto saving. nil value means no auto saving."
   (keats-put-line-property 'face 'keats-title)
   (newline)
   (funcall function)
-  (cond ((> (count-lines (point-min) (point-max) 1))
+  (cond ((> (count-lines (point-min) (point-max)) 1)
          (backward-delete-char 1)
          (goto-line 2)
          (goto-char (line-beginning-position))
