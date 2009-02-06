@@ -138,6 +138,10 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+
+(defconst keats-temp-buffer "*Keats*"
+  "Temp buffer.")
+
 (defvar keats-mode-map (make-sparse-keymap)
   "Keymap for `keats-mode'.")
 
@@ -151,9 +155,6 @@
   (define-key map (kbd "s") 'keats-search)
   (define-key map (kbd "w") 'keats-write)
   (define-key map (kbd "i") 'keats-interactive))
-
-(defvar keats-temp-buffer "*keats*"
-  "Temp buffer.")
 
 (defvar keats-list '()
   "List of plists where each plist is a keat on the form (:key
