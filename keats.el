@@ -98,20 +98,31 @@
 ;; == DESCRIPTION (C-c k d)
 ;; Prints the description for a key sequence.
 ;;
-;; == SEARCH
-;; Searches regularly, without respect to case, in description for a
-;; given regexp. If none is found, a message is printed. If there's
-;; any hit, a new buffer containing all hits is created. In this
-;; buffer you can use n and p to move up and down between the
-;; different keats. q kills the buffer. And RET calls the function
-;; that the key on the current line responds to interactively.
-;;
 ;; == REMOVE (C-c k r)
 ;; Removes a keat.
 ;;
 ;; == WRITE (C-c k w)
 ;; Writes `keats-list' to file. This is done every time Emacs is
 ;; killed.
+;;
+;; == INTERACTIVE (C-c k i)
+;; Will open a new buffer with all keats. This buffer is interactive
+;; in that way that it binds some keys so that it's easy to work with
+;; the keats. These keybindings are added:
+;;  * a - Calls keats-add
+;;  * e - Calls keats-edit
+;;  * r - Calls keast-remove
+;;  * n - Goes to next keat
+;;  * p - Goes to previous keat
+;;  * RET - Executes command for which keat is connected to
+;;  * w - Calls keats-write
+;;  * q - Exits the interactive buffer
+;;
+;; == SEARCH
+;; Searches regularly, without respect to case, in description for a
+;; given regexp. If none is found, a message is printed. If there's at
+;; least one hit, a new interactive buffer containing all hits is
+;; created
 ;;
 ;; Note that even though this might not be a common usage, all of the
 ;; above action can be called from a lisp program:
