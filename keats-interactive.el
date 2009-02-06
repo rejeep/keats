@@ -117,9 +117,9 @@
   )
 
 (defun keats-interactive-write ()
-  ""
+  "Writes keats to file."
   (interactive)
-  )
+  (keats-write))
 
 (defun keats-interactive-run ()
   ""
