@@ -125,9 +125,15 @@
   (keats-write))
 
 (defun keats-interactive-run ()
-  ""
+  "Runs command for with key at point is connected to."
   (interactive)
-  )
+  (let* ((key (keats-interactive-key-at-point))
+         (function (key-binding (read-kbd-macro key))))
+    (cond (function
+           (kill-this-buffer)
+           (call-interactively function))
+          (t
+           (message "%s runs no command" key)))))
 
 (defun keats-interactive-key-at-point ()
   "Returns key at point."
