@@ -86,6 +86,17 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun keats-interactive-mode (title)
+  "Major mode to interactively manage Keats."
+  (interactive "*sTitle: ")
+  (switch-to-buffer (get-buffer-create keats-interactive-temp-buffer))
+  (delete-region (point-min) (point-max))
+  (kill-all-local-variables)
+  (use-local-map keats-interactive-mode-map)
+  (setq mode-name "Keats Interactive")
+  (setq major-mode 'keats-interactive-mode)
+  (keats-interactive-set-title title))
+
 (provide 'keats-interactive)
 
 ;;; keats.el ends here
