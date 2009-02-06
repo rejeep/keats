@@ -135,6 +135,10 @@
     (string-match "^\\(.*\\):" line)
     (match-string-no-properties 1 line)))
 
+(defun keats-interactive-put-line-property (prop val)
+  "Changes the face of the current line."
+  (put-text-property (line-beginning-position) (line-end-position) prop val))
+
 (defun keats-interactive-set-title (title)
   "Sets the title."
   (goto-char (point-min))
