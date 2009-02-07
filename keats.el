@@ -297,7 +297,9 @@ read from the keyboard."
 (defun keats-add-to-list (key description)
   "Adds a keat to the list of keats if the key does not already
 exits. If it does exists, the description is updated."
-  (add-to-list 'keats-list `(:key ,key :description ,description) t))
+  (let ((keat `(:key ,key :description ,description)))
+    (add-to-list 'keats-list keat  t)
+    keat))
 
 (defun keats-to-string (keat)
   "Returns a string representation of a keat."
