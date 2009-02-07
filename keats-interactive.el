@@ -118,12 +118,11 @@
   (interactive)
   (let* ((key (keats-key nil))
          (keat (keats-key-exists key)))
-    (if key
+    (if (and key keat)
+        (message "%s already exist. Edit instead." key)
+      (let ((keat (keats-add key)))
         (if keat
-            (message "%s already exist. Edit instead." key)
-          (let ((keat (keats-add key)))
-            (if keat
-                (keats-interactive-insert-keat keat)))))))
+            (keats-interactive-insert-keat keat))))))
 
 (defun keats-interactive-edit ()
   "Edits keat at point."
