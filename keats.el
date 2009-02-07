@@ -181,9 +181,11 @@ without auto saving. nil value means no auto saving."
             (t
              (setq description (or description (read-string "Description: ")))
              (cond (description
-                    (add-to-list 'keats-list `(:key ,key :description ,description) t)
-                    (keats-update-save)
-                    (message "%s added" key)))))))
+                    (let ((keat `(:key ,key :description ,description)))
+                      (add-to-list 'keats-list keat t)
+                      (keats-update-save)
+                      (message "%s added" key)
+                      keat)))))))
 
 (defun keats-edit (&optional key description)
   "Edit the description of an already existing keat."
@@ -196,7 +198,8 @@ without auto saving. nil value means no auto saving."
                (cond (description
                       (plist-put keat :description description)
                       (keats-update-save)
-                      (message "%s updated" key))))
+                      (message "%s updated" key)
+                      keat)))
               (t
                (message "%s not found" key)
                nil)))))
@@ -207,10 +210,11 @@ without auto saving. nil value means no auto saving."
   (setq key (or key (keats-read-key)))
   (if key
       (let ((keat (keats-key-exists key)))
-        (cond ((and keat (yes-or-no-p (concat "Are you sure you want to remove " key "?")))
+        (cond ((and keat (yes-or-no-p (concat "Are you sure you want to remove " key "? ")))
                (setq keats-list (remove keat keats-list))
                (keats-update-save)
-               (message "%s removed" key))
+               (message "%s removed" key)
+               keat)
               (t
                (message "%s not found" key)
                nil)))))
