@@ -324,8 +324,8 @@ exits. If it does exists, the description is updated."
 (defun keats-update-save ()
   "First increases the number of updates. Then writes to file if
 there has been enough changes. But only if `keats-save-at' is non nil."
-  (if keats-save-at
-      (setq keats-save-count (1+ keats-save-count))
+  (when keats-save-at
+    (setq keats-save-count (1+ keats-save-count))
     (if (>= keats-save-count keats-save-at)
         (keats-write))))
 
