@@ -23,7 +23,8 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;; Description ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;
+;; This mode is an extension to `keats-mode'. This mode adds extends
+;; Keats mode with an interactive part.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -36,14 +37,21 @@
 ;; Then require it:
 ;; (require 'keats-interactive)
 ;;
-;; Then start it:
-;; (keats-interactive-mode t) or M-x keats-interactive-mode
-;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Commentary ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
-;;
+;; You are most likely to use this mode if you want to add, edit or
+;; remove many keats at the same time. In this mode these keybindings
+;; are set:
+;;  * a - Adds a new keat
+;;  * e - Edits keat at point
+;;  * r - Removes keat at point
+;;  * n - Move one step down
+;;  * p - Move one step up
+;;  * q - Quit the buffer and mode
+;;  * w - Writes keats to file
+;;  * RET - Runs command for which key at point is connected to
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
