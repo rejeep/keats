@@ -188,11 +188,10 @@ without auto saving. nil value means no auto saving."
             (t
              (setq description (or description (read-string "Description: ")))
              (when description
-               (let ((keat `(:key ,key :description ,description)))
-                 (add-to-list 'keats-list keat t)
-                 (keats-update-save)
-                 (message "%s added" key)
-                 keat))))))
+               (keats-add-to-list key description)
+               (keats-update-save)
+               (message "%s added" key)
+               keat)))))
 
 (defun keats-edit (&optional key description)
   "Edit the description of an already existing keat."
@@ -296,6 +295,11 @@ read from the keyboard."
             (plist-get keat :key))
           keats-list))
 
+(defun keats-add-to-list (key description)
+  "Adds a keat to the list of keats if the key does not already
+exits. If it does exists, the description is updated."
+  (add-to-list 'keats-list `(:key ,key :description ,description) t))
+
 (defun keats-to-string (keat)
   "Returns a string representation of a keat."
   (concat (plist-get keat :key) ": " (plist-get keat :description)))
@@ -340,13 +344,13 @@ there has been enough changes. But only if `keats-save-at' is non nil."
       (insert-file keats-file)
       (goto-char (point-min))
       (while (re-search-forward (concat "^\\(.*\\)" keats-delimiter "\\(.*\\)$") nil t)
-        (add-to-list 'keats-list `(:key ,(match-string-no-properties 1) :description ,(match-string-no-properties 2))))
-      (kill-this-buffer)
-      (add-hook 'kill-emacs-hook
-                '(lambda()
-                   (keats-write))))
-    (unless (keats-file-valid-p)
-      (error "No valid keats file"))))
+        (keats-add-to-list (match-string-no-properties 1) (match-string-no-properties 2)))
+      (kill-this-buffer))
+    (add-hook 'kill-emacs-hook
+              '(lambda()
+                 (keats-write))))
+  (unless (keats-file-valid-p)
+    (error "No valid keats file"))))
 
 (provide 'keats)
 
