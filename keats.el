@@ -350,7 +350,7 @@ there has been enough changes. But only if `keats-save-at' is non nil."
               '(lambda()
                  (keats-write))))
   (unless (keats-file-valid-p)
-    (error "No valid keats file"))))
+    (error "No valid keats file")))
 
 (provide 'keats)
 
