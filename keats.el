@@ -84,8 +84,13 @@
 ;; means to not auto save at all.
 ;;
 ;; Many of the commands will prompt you for a key sequence. To enter
-;; one, start type the sequence and when done press RET (enter). If
-;; you want to abort, press C-g.
+;; one, start type the sequence and when done press RET
+;; (enter/return). If you want to abort, press C-g. To type key by
+;; hand, give prefix key (C-u). This will give a prompt where the key
+;; sequence can be typed by hand. This is useful if the key contains
+;; "C-g" or "RET" normally would abort or continue. This will also
+;; give completion. It's also usefull if you want to enter something
+;; else than a key sequence, such as a function name.
 ;;
 ;; == ADD (C-c k a)
 ;; Will add a new keat if it does not already exist. If it does exists
