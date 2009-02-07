@@ -324,7 +324,7 @@ there has been enough changes. But only if `keats-save-at' is non nil."
   :init-value nil
   :keymap keats-mode-map
   (when keats-mode
-    (when (not (keats-file-exists-p))
+    (unless (keats-file-exists-p)
       (switch-to-buffer (get-buffer-create keats-temp-buffer))
       (delete-region (point-min) (point-max))
       (write-file keats-file nil)
