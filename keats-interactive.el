@@ -114,9 +114,11 @@
            (keats-interactive-insert-keat keat (line-beginning-position))))))
 
 (defun keats-interactive-remove ()
-  ""
+  "Removes keat at point."
   (interactive)
-  )
+  (cond ((keats-remove (keats-interactive-key-at-point))
+         (delete-region (line-beginning-position) (line-end-position))
+         (delete-char 1))))
 
 (defun keats-interactive-next ()
   ""
