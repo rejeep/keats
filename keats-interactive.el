@@ -105,9 +105,13 @@
             (keats-interactive-insert-keat keat))))))
 
 (defun keats-interactive-edit ()
-  ""
+  "Edits keat at point."
   (interactive)
-  )
+  (let* ((key (keats-interactive-key-at-point))
+         (keat (keats-key-exists key)))
+    (cond ((and keat (keats-edit key))
+           (delete-region (line-beginning-position) (line-end-position))
+           (keats-interactive-insert-keat keat (line-beginning-position))))))
 
 (defun keats-interactive-remove ()
   ""
