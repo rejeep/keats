@@ -267,7 +267,7 @@ without auto saving. nil value means no auto saving."
 RET and key sequence will be returned. And to abort, press C-g
 and nil will be returned.
 
-With prefix argument, type key sequence in characters."
+With prefix argument, type key sequence in as characters."
   (interactive "P")
   (if arg
       (completing-read "Type key: " (keats-keys))
