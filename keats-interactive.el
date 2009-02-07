@@ -139,6 +139,20 @@
           (t
            (message "%s runs no command" key)))))
 
+(defun keats-interactive-insert-keat (keat &optional pos)
+  "Inserts a keat at POS or if POS is nil last in the list."
+  (save-excursion
+    (goto-char (or pos (point-max)))
+    (unless (= (current-column) 0)
+      (insert "\n"))
+    (insert (keats-to-string keat)))
+  (keats-interactive-put-line-property 'face 'keats-highlight))
+
+(defun keats-interactive-insert-keats (keats &optional pos)
+  "Inserts a list of keats. See `keats-interactive-insert-keat'."
+  (dolist (keat keats)
+    (keats-interactive-insert-keat keat pos)))
+
 (defun keats-interactive-key-at-point ()
   "Returns key at point."
   (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
