@@ -163,9 +163,9 @@
   :group 'keats)
 
 (defcustom keats-delimiter "|"
-  "The delimiter used in `keats-file' to separate key sequence
-  from description. Don't change this when you already have
-  contents in you `keats-file'. If you do this, old keats will
+  "The delimiter used in `keats-file' to separate the key from
+  the description. Don't change this when you already have
+  contents in your `keats-file'. If you do this, old keats will
   not be recognized."
   :group 'keats)
 
