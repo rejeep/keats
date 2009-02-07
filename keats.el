@@ -181,17 +181,16 @@ without auto saving. nil value means no auto saving."
 `keats-edit' is called for key if user confirms."
   (interactive)
   (setq key (keats-key key))
-  (if key
-      (cond ((keats-key-exists key)
-             (if (yes-or-no-p (concat key " already exists. Do you want to edit it? "))
-                 (keats-edit key)))
-            (t
-             (setq description (or description (read-string "Description: ")))
-             (when description
-               (keats-add-to-list key description)
-               (keats-update-save)
-               (message "%s added" key)
-               keat)))))
+  (when key
+    (if (keats-key-exists key)
+        (if (yes-or-no-p (concat key " already exists. Do you want to edit it? "))
+            (keats-edit key))
+      (setq description (or description (read-string "Description: ")))
+      (when description
+        (let ((keat (keats-add-to-list key description)))
+          (keats-update-save)
+          (message "%s added" key)
+          keat)))))
 
 (defun keats-edit (&optional key description)
   "Edit the description of an already existing keat."
