@@ -209,7 +209,6 @@ lines are highlighted."
 
 (defun keats-interactive-mode (title)
   "Major mode to interactively manage Keats."
-  (interactive "*sTitle: ")
   (switch-to-buffer (get-buffer-create keats-interactive-temp-buffer))
   (delete-region (point-min) (point-max))
   (kill-all-local-variables)
