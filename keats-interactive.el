@@ -182,9 +182,9 @@
 (defun keats-interactive-move (function)
   "Helper for moving up and down in list. Makes sure that correct
 lines are highlighted."
-  (keats-interactive-put-line-property 'face nil)
+  (keats-interactive-put-text-property 'face nil)
   (funcall function)
-  (keats-interactive-put-line-property 'face 'keats-interactive-highlight))
+  (keats-interactive-put-text-property 'face 'keats-interactive-highlight))
 
 (defun keats-interactive-insert-keat (keat &optional pos)
   "Inserts a keat at POS or if POS is nil last in the list."
@@ -193,7 +193,7 @@ lines are highlighted."
     (unless (= (current-column) 0)
       (insert "\n"))
     (insert (keats-to-string keat)))
-  (keats-interactive-put-line-property 'face 'keats-interactive-highlight))
+  (keats-interactive-put-text-property 'face 'keats-interactive-highlight))
 
 (defun keats-interactive-insert-keats (keats &optional pos)
   "Inserts a list of keats. See `keats-interactive-insert-keat'."
@@ -206,8 +206,9 @@ lines are highlighted."
     (string-match "^\\(.*\\):" line)
     (match-string-no-properties 1 line)))
 
-(defun keats-interactive-put-line-property (prop val &optional beg end)
-  "Changes the face of the current line."
+(defun keats-interactive-put-text-property (prop val &optional beg end)
+  "Changes the face of the current line or from BEG to END if non
+nil."
   (put-text-property (or beg (line-beginning-position)) (or end (line-end-position)) prop val))
 
 (defun keats-interactive-set-title (title)
@@ -217,7 +218,7 @@ lines are highlighted."
   (insert title)
   (let ((min (point-min)) (max (point-max)))
     (setq keats-interactive-title-height (count-lines min max))
-    (keats-interactive-put-line-property 'face 'keats-interactive-title min max))
+    (keats-interactive-put-text-property 'face 'keats-interactive-title min max))
   (newline))
 
 (defun keats-interactive-mode (title)
