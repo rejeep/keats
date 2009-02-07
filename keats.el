@@ -112,7 +112,7 @@
 ;; matching keats.
 ;;
 ;; == INTERACTIVE (C-c k i)
-;; Opens `keats-interactive-mode' with all keats.x
+;; Opens `keats-interactive-mode' with all keats.
 ;;
 ;; Note that even though this might not be a common usage, all of the
 ;; above action can be called from a lisp program:
