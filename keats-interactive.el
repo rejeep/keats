@@ -94,9 +94,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun keats-interactive-add ()
-  ""
+  "Adds a new keat if it does not already exists."
   (interactive)
-  )
+  (let* ((key (keats-read-key))
+         (keat (keats-key-exists key)))
+    (if keat
+        (message "%s already exist. Edit instead." key)
+      (let ((keat (keats-add key)))
+        (if keat
+            (keats-interactive-insert-keat keat))))))
 
 (defun keats-interactive-edit ()
   ""
