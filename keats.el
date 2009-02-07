@@ -1,6 +1,6 @@
 ;;; keats.el --- Keyboard shortcut cheats
 
-;; Copyright 2008  Johan Andersson
+;; Copyright 2009  Johan Andersson
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; License ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;

@@ -1,6 +1,6 @@
 ;;; keats-interactive.el --- Interactive mode for Keats mode.
 
-;; Copyright 2008  Johan Andersson
+;; Copyright 2009  Johan Andersson
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; License ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
