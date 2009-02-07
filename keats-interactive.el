@@ -118,7 +118,8 @@
   (interactive)
   (cond ((keats-remove (keats-interactive-key-at-point))
          (delete-region (line-beginning-position) (line-end-position))
-         (delete-char 1))))
+         (delete-char 1)
+         (keats-interactive-previous))))
 
 (defun keats-interactive-next ()
   ""
