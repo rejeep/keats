@@ -58,6 +58,7 @@
 ;;; Code:
 
 (require 'keats)
+(require 'easymenu)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -98,6 +99,18 @@
      :background "dim gray"))
   "Face for active line."
   :group 'keats)
+
+(easy-menu-define keats-interactive-mode-menu keats-interactive-mode-map
+  "Keats menu"
+  '("Keats"
+    ["Add" keats-interactive-add t]
+    ["Edit" keats-interactive-edit t]
+    ["Remove" keats-interactive-remove t]
+    ["Next" keats-interactive-next t]
+    ["Previous" keats-interactive-previous t]
+    ["Quit" keats-interactive-quit t]
+    ["Write" keats-interactive-write t]
+    ["Run" keats-interactive-run t]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
