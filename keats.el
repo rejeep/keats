@@ -348,8 +348,8 @@ there has been enough changes. But only if `keats-save-at' is non nil."
         (keats-add-to-list (match-string-no-properties 1) (match-string-no-properties 2)))
       (kill-this-buffer))
     (add-hook 'kill-emacs-hook
-              '(lambda()
-                 (keats-write))))
+              (lambda()
+                (keats-write))))
   (unless (keats-file-valid-p)
     (error "No valid keats file")))
 
