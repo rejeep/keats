@@ -122,14 +122,20 @@
          (keats-interactive-previous))))
 
 (defun keats-interactive-next ()
-  ""
+  "Moves one step down in the list of keats."
   (interactive)
-  )
+  (keats-interactive-move
+   (lambda ()
+     (if (< (line-number-at-pos nil) (count-lines (point-min) (point-max)))
+         (next-line)))))
 
 (defun keats-interactive-previous ()
-  ""
+  "Moves one step down in the list of keats."
   (interactive)
-  )
+  (keats-interactive-move
+   (lambda ()
+     (if (> (line-number-at-pos nil) 2)
+         (previous-line)))))
 
 (defun keats-interactive-quit ()
   "Exits mode by closing buffer."
@@ -151,6 +157,13 @@
            (call-interactively function))
           (t
            (message "%s runs no command" key)))))
+
+(defun keats-interactive-move (function)
+  "Helper for moving up and down in list. Makes sure that correct
+lines are highlighted."
+  (keats-interactive-put-line-property 'face nil)
+  (funcall function)
+  (keats-interactive-put-line-property 'face 'keats-highlight))
 
 (defun keats-interactive-insert-keat (keat &optional pos)
   "Inserts a keat at POS or if POS is nil last in the list."
