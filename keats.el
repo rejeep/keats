@@ -182,12 +182,12 @@ without auto saving. nil value means no auto saving."
                  (keats-edit key)))
             (t
              (setq description (or description (read-string "Description: ")))
-             (cond (description
-                    (let ((keat `(:key ,key :description ,description)))
-                      (add-to-list 'keats-list keat t)
-                      (keats-update-save)
-                      (message "%s added" key)
-                      keat)))))))
+             (when description
+               (let ((keat `(:key ,key :description ,description)))
+                 (add-to-list 'keats-list keat t)
+                 (keats-update-save)
+                 (message "%s added" key)
+                 keat))))))
 
 (defun keats-edit (&optional key description)
   "Edit the description of an already existing keat."
@@ -197,11 +197,11 @@ without auto saving. nil value means no auto saving."
       (let ((keat (keats-key-exists key)))
         (cond (keat
                (setq description (or description (read-string "Description: " (plist-get keat :description))))
-               (cond (description
-                      (plist-put keat :description description)
-                      (keats-update-save)
-                      (message "%s updated" key)
-                      keat)))
+               (when description
+                 (plist-put keat :description description)
+                 (keats-update-save)
+                 (message "%s updated" key)
+                 keat))
               (t
                (message "%s not found" key)
                nil)))))
@@ -213,11 +213,11 @@ without auto saving. nil value means no auto saving."
   (if key
       (let ((keat (keats-key-exists key)))
         (cond (keat
-               (cond ((yes-or-no-p (concat "Are you sure you want to remove " key "? "))
-                      (setq keats-list (remove keat keats-list))
-                      (keats-update-save)
-                      (message "%s removed" key)
-                      keat)))
+               (when (yes-or-no-p (concat "Are you sure you want to remove " key "? "))
+                 (setq keats-list (remove keat keats-list))
+                 (keats-update-save)
+                 (message "%s removed" key)
+                 keat))
               (t
                (message "%s not found" key)
                nil)))))
@@ -307,25 +307,25 @@ there has been enough changes. But only if `keats-save-at' is non nil."
   "Simple interface to Emacs keybinding cheats."
   :init-value nil
   :keymap keats-mode-map
-  (cond (keats-mode
-         (cond ((not (keats-file-exists-p))
-                (switch-to-buffer (get-buffer-create keats-temp-buffer))
-                (delete-region (point-min) (point-max))
-                (write-file keats-file nil)
-                (kill-this-buffer)))
-         (cond ((keats-file-valid-p)
-                (switch-to-buffer (get-buffer-create keats-temp-buffer))
-                (delete-region (point-min) (point-max))
-                (insert-file keats-file)
-                (goto-char (point-min))
-                (while (re-search-forward (concat "^\\(.*\\)" keats-delimiter "\\(.*\\)$") nil t)
-                  (add-to-list 'keats-list `(:key ,(match-string-no-properties 1) :description ,(match-string-no-properties 2))))
-                (kill-this-buffer)
-                (add-hook 'kill-emacs-hook
-                          '(lambda()
-                             (keats-write)))))
-         (unless (keats-file-valid-p)
-           (error "No valid keats file")))))
+  (when keats-mode
+    (when (not (keats-file-exists-p))
+      (switch-to-buffer (get-buffer-create keats-temp-buffer))
+      (delete-region (point-min) (point-max))
+      (write-file keats-file nil)
+      (kill-this-buffer))
+    (when (keats-file-valid-p)
+      (switch-to-buffer (get-buffer-create keats-temp-buffer))
+      (delete-region (point-min) (point-max))
+      (insert-file keats-file)
+      (goto-char (point-min))
+      (while (re-search-forward (concat "^\\(.*\\)" keats-delimiter "\\(.*\\)$") nil t)
+        (add-to-list 'keats-list `(:key ,(match-string-no-properties 1) :description ,(match-string-no-properties 2))))
+      (kill-this-buffer)
+      (add-hook 'kill-emacs-hook
+                '(lambda()
+                   (keats-write))))
+    (unless (keats-file-valid-p)
+      (error "No valid keats file"))))
 
 (provide 'keats)
 

@@ -130,9 +130,9 @@
   (interactive)
   (let* ((key (keats-interactive-key-at-point))
          (keat (keats-key-exists key)))
-    (cond ((and keat (keats-edit key))
-           (keats-interactive-remove-keat)
-           (keats-interactive-insert-keat keat (line-beginning-position))))))
+    (when (and keat (keats-edit key))
+      (keats-interactive-remove-keat)
+      (keats-interactive-insert-keat keat (line-beginning-position)))))
 
 (defun keats-interactive-remove ()
   "Removes keat at point."
@@ -203,9 +203,9 @@ lines are highlighted."
   "Removes keat at point from list (not from memory)."
   (let ((inhibit-read-only t))
     (delete-region (line-beginning-position) (line-end-position))
-    (cond (whole-line
-           (delete-char 1)
-           (keats-interactive-previous)))))
+    (when whole-line
+      (delete-char 1)
+      (keats-interactive-previous))))
 
 (defun keats-interactive-key-at-point ()
   "Returns key at point."
