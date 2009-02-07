@@ -63,7 +63,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defconst keats-interactive-temp-buffer "*Keats Interactive*"
-  "Temp buffer.")
+  "Buffer used for this mode.")
 
 (defvar keats-interactive-title-height nil
   "The number of rows that the title is high.")
