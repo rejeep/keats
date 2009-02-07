@@ -51,7 +51,9 @@
 ;;  * p - Move one step up
 ;;  * q - Quit the buffer and mode
 ;;  * w - Writes keats to file
-;;  * RET - Runs command for which key at point is connected to
+;;  * RET - Runs command for which key at point is connected to. With
+;;    prefix argument (C-u) the interactive buffer is closed before
+;;    the command is executed.
 ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
