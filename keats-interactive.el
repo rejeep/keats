@@ -137,8 +137,8 @@
 (defun keats-interactive-remove ()
   "Removes keat at point."
   (interactive)
-  (cond ((keats-remove (keats-interactive-key-at-point))
-         (keats-interactive-remove-keat t))))
+  (if (keats-remove (keats-interactive-key-at-point))
+      (keats-interactive-remove-keat t)))
 
 (defun keats-interactive-next ()
   "Moves one step down in the list of keats."
