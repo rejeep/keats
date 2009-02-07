@@ -128,7 +128,6 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-
 (defconst keats-temp-buffer "*Keats*"
   "Temp buffer.")
 
