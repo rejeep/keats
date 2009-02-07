@@ -131,16 +131,14 @@
   (let* ((key (keats-interactive-key-at-point))
          (keat (keats-key-exists key)))
     (cond ((and keat (keats-edit key))
-           (delete-region (line-beginning-position) (line-end-position))
+           (keats-interactive-remove-keat)
            (keats-interactive-insert-keat keat (line-beginning-position))))))
 
 (defun keats-interactive-remove ()
   "Removes keat at point."
   (interactive)
   (cond ((keats-remove (keats-interactive-key-at-point))
-         (delete-region (line-beginning-position) (line-end-position))
-         (delete-char 1)
-         (keats-interactive-previous))))
+         (keats-interactive-remove-keat))))
 
 (defun keats-interactive-next ()
   "Moves one step down in the list of keats."
@@ -190,15 +188,24 @@ lines are highlighted."
   "Inserts a keat at POS or if POS is nil last in the list."
   (save-excursion
     (goto-char (or pos (point-max)))
-    (unless (= (current-column) 0)
-      (insert "\n"))
-    (insert (keats-to-string keat)))
+    (let ((inhibit-read-only t))
+      (unless (= (current-column) 0)
+        (insert "\n"))
+      (insert (keats-to-string keat))))
   (keats-interactive-put-text-property 'face 'keats-interactive-highlight))
 
 (defun keats-interactive-insert-keats (keats &optional pos)
   "Inserts a list of keats. See `keats-interactive-insert-keat'."
   (dolist (keat keats)
     (keats-interactive-insert-keat keat pos)))
+
+(defun keats-interactive-remove-keat (&optional whole-line)
+  "Removes keat at point from list (not from memory)."
+  (let ((inhibit-read-only t))
+    (delete-region (line-beginning-position) (line-end-position))
+    (cond (whole-line
+           (delete-char 1)
+           (keats-interactive-previous)))))
 
 (defun keats-interactive-key-at-point ()
   "Returns key at point."
@@ -209,23 +216,27 @@ lines are highlighted."
 (defun keats-interactive-put-text-property (prop val &optional beg end)
   "Changes the face of the current line or from BEG to END if non
 nil."
-  (put-text-property (or beg (line-beginning-position)) (or end (line-end-position)) prop val))
+  (let ((inhibit-read-only t))
+    (put-text-property (or beg (line-beginning-position)) (or end (line-end-position)) prop val)))
 
 (defun keats-interactive-set-title (title)
   "Sets the title."
   (goto-char (point-min))
-  (delete-region (line-beginning-position) (line-end-position))
-  (insert title)
-  (let ((min (point-min)) (max (point-max)))
+  (let ((inhibit-read-only t) (min) (max))
+    (delete-region (line-beginning-position) (line-end-position))
+    (insert title)
+    (setf min (point-min)
+          max (point-max))
     (setq keats-interactive-title-height (count-lines min max))
-    (keats-interactive-put-text-property 'face 'keats-interactive-title min max))
-  (newline))
+    (keats-interactive-put-text-property 'face 'keats-interactive-title min max)
+    (newline)))
 
 (defun keats-interactive-mode (title)
   "Major mode to interactively manage Keats."
   (switch-to-buffer (get-buffer-create keats-interactive-temp-buffer))
   (delete-region (point-min) (point-max))
   (kill-all-local-variables)
+  (setq buffer-read-only t)
   (use-local-map keats-interactive-mode-map)
   (setq mode-name "Keats Interactive")
   (setq major-mode 'keats-interactive-mode)
