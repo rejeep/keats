@@ -212,11 +212,12 @@ without auto saving. nil value means no auto saving."
   (setq key (or key (keats-read-key)))
   (if key
       (let ((keat (keats-key-exists key)))
-        (cond ((and keat (yes-or-no-p (concat "Are you sure you want to remove " key "? ")))
-               (setq keats-list (remove keat keats-list))
-               (keats-update-save)
-               (message "%s removed" key)
-               keat)
+        (cond (keat
+               (cond ((yes-or-no-p (concat "Are you sure you want to remove " key "? "))
+                      (setq keats-list (remove keat keats-list))
+                      (keats-update-save)
+                      (message "%s removed" key)
+                      keat)))
               (t
                (message "%s not found" key)
                nil)))))
