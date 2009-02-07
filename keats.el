@@ -105,11 +105,14 @@
 ;; Writes `keats-list' to file. This is done every time Emacs is
 ;; killed.
 ;;
-;; == SEARCH
+;; == SEARCH (C-c k s)
 ;; Searches regularly, without respect to case, in description for a
 ;; given regexp. If none is found, a message is printed. If there's at
-;; least one hit, a new interactive buffer containing all hits is
-;; created
+;; least one hit, `keats-interactive-mode' is started showing all
+;; matching keats.
+;;
+;; == INTERACTIVE (C-c k i)
+;; Opens `keats-interactive-mode' with all keats.x
 ;;
 ;; Note that even though this might not be a common usage, all of the
 ;; above action can be called from a lisp program:
