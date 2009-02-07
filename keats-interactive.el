@@ -66,8 +66,7 @@
   "Temp buffer.")
 
 (defvar keats-interactive-title-height nil
-  "We must know how high the title is so that we don't enter it's
-  area.")
+  "The number of rows that the title is high.")
 
 (defvar keats-interactive-mode-hook '()
   "Hook for this mode. Is evaluated last in mode startup.")
