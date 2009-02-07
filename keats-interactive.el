@@ -165,13 +165,16 @@
   (interactive)
   (keats-write))
 
-(defun keats-interactive-run ()
-  "Runs command for with key at point is connected to."
-  (interactive)
+(defun keats-interactive-run (arg)
+  "Runs command for with key at point is connected to.
+
+With prefix argument, kill interactive buffer before executing command."
+  (interactive "P")
   (let* ((key (keats-interactive-key-at-point))
          (function (key-binding (read-kbd-macro key))))
     (cond (function
-           (kill-this-buffer)
+           (if arg
+               (kill-this-buffer))
            (call-interactively function))
           (t
            (message "%s runs no command" key)))))
