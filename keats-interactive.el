@@ -85,14 +85,14 @@
     map)
   "Keymap for `keats-interactive-mode'.")
 
-(defface keats-title
+(defface keats-interactive-title
   '((((class color) (background dark))
      :foreground "red"
      :bold t))
   "Face for title."
   :group 'keats)
 
-(defface keats-highlight
+(defface keats-interactive-highlight
   '((((class color) (background light))
      :background "gray95")
     (((class color) (background dark))
@@ -185,7 +185,7 @@
 lines are highlighted."
   (keats-interactive-put-line-property 'face nil)
   (funcall function)
-  (keats-interactive-put-line-property 'face 'keats-highlight))
+  (keats-interactive-put-line-property 'face 'keats-interactive-highlight))
 
 (defun keats-interactive-insert-keat (keat &optional pos)
   "Inserts a keat at POS or if POS is nil last in the list."
@@ -194,7 +194,7 @@ lines are highlighted."
     (unless (= (current-column) 0)
       (insert "\n"))
     (insert (keats-to-string keat)))
-  (keats-interactive-put-line-property 'face 'keats-highlight))
+  (keats-interactive-put-line-property 'face 'keats-interactive-highlight))
 
 (defun keats-interactive-insert-keats (keats &optional pos)
   "Inserts a list of keats. See `keats-interactive-insert-keat'."
@@ -218,7 +218,7 @@ lines are highlighted."
   (insert title)
   (let ((min (point-min)) (max (point-max)))
     (setq keats-interactive-title-height (count-lines min max))
-    (keats-interactive-put-line-property 'face 'keats-title min max))
+    (keats-interactive-put-line-property 'face 'keats-interactive-title min max))
   (newline))
 
 (defun keats-interactive-mode (title)
