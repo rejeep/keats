@@ -134,7 +134,7 @@
   (interactive)
   (keats-interactive-move
    (lambda ()
-     (if (> (line-number-at-pos nil) 2)
+     (if (> (line-number-at-pos nil) (1+ keats-interactive-title-height))
          (previous-line)))))
 
 (defun keats-interactive-quit ()
