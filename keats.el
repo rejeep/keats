@@ -237,23 +237,16 @@ without auto saving. nil value means no auto saving."
       (if (string-match query (plist-get keat :description))
           (add-to-list 'matches keat)))
     (cond (matches
-           (keats-interactive-do
-            (concat "Matches for: '" query "'")
-            (lambda ()
-              (dolist (match matches)
-                (insert (keats-to-string match))
-                (newline)))))
+           (keats-interactive-mode (concat "Matches for: '" query "'"))
+           (keats-interactive-insert-keats matches))
           (t
            (message "No matches for %s" query)))))
 
 (defun keats-interactive ()
   "Enters keats interactive mode with all keats."
   (interactive)
-  (keats-interactive-do
-   "Keats"
-   (lambda ()
-     (dolist (keat keats-list)
-       (insert (concat (keats-to-string keat) "\n"))))))
+  (keats-interactive-mode "Showing all keats")
+  (keats-interactive-insert-keats keats-list))
 
 (defun keats-write ()
   "Writes `keats-list' to `keats-file'."
