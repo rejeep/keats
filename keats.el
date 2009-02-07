@@ -175,7 +175,7 @@ without auto saving. nil value means no auto saving."
   "Adds a keat if it does not already exist. If it exists,
 `keats-edit' is called for key if user confirms."
   (interactive)
-  (setq key (or key (keats-read-key)))
+  (setq key (keats-key key))
   (if key
       (cond ((keats-key-exists key)
              (if (yes-or-no-p (concat key " already exists. Do you want to edit it? "))
@@ -192,7 +192,7 @@ without auto saving. nil value means no auto saving."
 (defun keats-edit (&optional key description)
   "Edit the description of an already existing keat."
   (interactive)
-  (setq key (or key (keats-read-key)))
+  (setq key (keats-key key))
   (if key
       (let ((keat (keats-key-exists key)))
         (cond (keat
@@ -209,7 +209,7 @@ without auto saving. nil value means no auto saving."
 (defun keats-remove (&optional key)
   "Removes a keat from the list."
   (interactive)
-  (setq key (or key (keats-read-key)))
+  (setq key (keats-key key))
   (if key
       (let ((keat (keats-key-exists key)))
         (cond (keat
@@ -225,7 +225,7 @@ without auto saving. nil value means no auto saving."
 (defun keats-print-description (&optional key)
   "Prints the description of the given key sequence."
   (interactive)
-  (setq key (or key (keats-read-key)))
+  (setq key (keats-key key))
   (if key
       (let ((keat (keats-key-exists key)))
         (if keat
@@ -262,18 +262,34 @@ without auto saving. nil value means no auto saving."
   (kill-this-buffer)
   (setq keats-save-count 0))
 
-(defun keats-read-key ()
+(defun keats-read-key (arg)
   "Reads a key sequence from the keyboard. To end input, press
 RET and key sequence will be returned. And to abort, press C-g
-and nil will be returned."
-  (let ((cursor-in-echo-area t) (key) (res))
-    (setq key (read-key-sequence-vector "Describe key: "))
-    (while (not (string-match "RET\\|C-g" (key-description key)))
-      (setq res (vconcat res key))
-      (setq key (read-key-sequence-vector (key-description res))))
-    (if (string= (key-description key) "RET")
-        (unless (string= (key-description res) "")
-          (key-description res)))))
+and nil will be returned.
+
+With prefix argument, type key sequence in characters."
+  (interactive "P")
+  (if arg
+      (completing-read "Type key: " (keats-keys))
+    (let ((cursor-in-echo-area t) (key) (res))
+      (setq key (read-key-sequence-vector "Describe key: "))
+      (while (not (string-match "RET\\|C-g" (key-description key)))
+        (setq res (vconcat res key))
+        (setq key (read-key-sequence-vector (key-description res))))
+      (if (string= (key-description key) "RET")
+          (unless (string= (key-description res) "")
+            (key-description res))))))
+
+(defun keats-key (key)
+  "Will return KEY if non nil. Otherwise it will return a key
+read from the keyboard."
+  (or key (call-interactively 'keats-read-key)))
+
+(defun keats-keys ()
+  "Returns a list of all keys in `keats-list'."
+  (mapcar (lambda (keat)
+            (plist-get keat :key))
+          keats-list))
 
 (defun keats-to-string (keat)
   "Returns a string representation of a keat."

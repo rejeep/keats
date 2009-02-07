@@ -116,7 +116,7 @@
 (defun keats-interactive-add ()
   "Adds a new keat if it does not already exists."
   (interactive)
-  (let* ((key (keats-read-key))
+  (let* ((key (keats-key nil))
          (keat (keats-key-exists key)))
     (if key
         (if keat
