@@ -293,7 +293,7 @@ read from the keyboard."
 match."
   (let ((minibuffer-local-completion-map (copy-keymap minibuffer-local-completion-map)))
     (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
-    (completing-read prompt collection predicate nil initial-input hist def inherit-input-method)))
+    (completing-read prompt collection predicate nil hist def inherit-input-method)))
 
 (defun keats-keys ()
   "Returns a list of all keys in `keats-list'."
