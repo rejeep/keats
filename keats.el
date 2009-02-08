@@ -1,4 +1,4 @@
-;;; keats.el --- Keyboard shortcut cheats
+;;; keats.el --- Keybinding Cheats
 
 ;; Copyright 2009  Johan Andersson
 
