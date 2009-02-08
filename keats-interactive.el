@@ -177,8 +177,7 @@
     (keats-search (read-string "Query: "))))
 
 (defun keats-interactive-run (arg)
-  "Runs command for with key at point is connected to.
-
+  "Runs command for which key at point is connected to.
 With prefix argument, kill interactive buffer before executing command."
   (interactive "P")
   (let* ((key (keats-interactive-key-at-point))
