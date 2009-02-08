@@ -288,12 +288,12 @@ With prefix argument, type key sequence in as characters."
 read from the keyboard."
   (or key (call-interactively 'keats-read-key)))
 
-(defun keats-completing-read (prompt collection &optional predicate initial-input hist def inherit-input-method)
+(defun keats-completing-read (prompt collection)
   "Like completing read, but allows spaces even if there's no
 match."
-  (let ((minibuffer-local-completion-map (copy-keymap minibuffer-local-completion-map)))
-    (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
-    (completing-read prompt collection predicate nil hist def inherit-input-method)))
+  (let ((map (copy-keymap minibuffer-local-completion-map)))
+    (define-key map (kbd "SPC") 'self-insert-command)
+    (completing-read prompt collection)))
 
 (defun keats-keys ()
   "Returns a list of all keys in `keats-list'."
