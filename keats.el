@@ -273,7 +273,7 @@ and nil will be returned.
 With prefix argument, type key sequence in as characters."
   (interactive "P")
   (if arg
-      (completing-read "Type key: " (keats-keys))
+      (keats-completing-read "Type key: " (keats-keys))
     (let ((cursor-in-echo-area t) (key) (res))
       (setq key (read-key-sequence-vector "Describe key: "))
       (while (not (string-match "RET\\|C-g" (key-description key)))
@@ -287,6 +287,14 @@ With prefix argument, type key sequence in as characters."
   "Will return KEY if non nil. Otherwise it will return a key
 read from the keyboard."
   (or key (call-interactively 'keats-read-key)))
+
+(defun keats-completing-read (prompt collection &optional predicate initial-input hist def inherit-input-method)
+  "Like completing read, but allows spaces even if there's no
+match."
+  (let ((minibuffer-local-completion-map
+         minibuffer-local-completion-map))
+    (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
+    (completing-read prompt collection predicate nil initial-input hist def inherit-input-method)))
 
 (defun keats-keys ()
   "Returns a list of all keys in `keats-list'."
