@@ -291,8 +291,7 @@ read from the keyboard."
 (defun keats-completing-read (prompt collection &optional predicate initial-input hist def inherit-input-method)
   "Like completing read, but allows spaces even if there's no
 match."
-  (let ((minibuffer-local-completion-map
-         minibuffer-local-completion-map))
+  (let ((minibuffer-local-completion-map (copy-keymap minibuffer-local-completion-map)))
     (define-key minibuffer-local-completion-map (kbd "SPC") 'self-insert-command)
     (completing-read prompt collection predicate nil initial-input hist def inherit-input-method)))
 
