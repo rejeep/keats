@@ -51,6 +51,7 @@
 ;;  * p - Move one step up
 ;;  * q - Quit the buffer and mode
 ;;  * w - Writes keats to file
+;;  * s - Search for keyword
 ;;  * RET - Runs command for which key at point is connected to. With
 ;;    prefix argument (C-u) the interactive buffer is closed before
 ;;    the command is executed.
@@ -82,6 +83,7 @@
     (define-key map (kbd "p") 'keats-interactive-previous)
     (define-key map (kbd "q") 'keats-interactive-quit)
     (define-key map (kbd "w") 'keats-interactive-write)
+    (define-key map (kbd "s") 'keats-interactive-search)
     (define-key map (kbd "RET") 'keats-interactive-run)
     map)
   "Keymap for `keats-interactive-mode'.")
@@ -111,6 +113,7 @@
     ["Previous" keats-interactive-previous t]
     ["Quit" keats-interactive-quit t]
     ["Write" keats-interactive-write t]
+    ["Search" keats-interactive-search t]
     ["Run" keats-interactive-run t]))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -166,6 +169,12 @@
   "Writes keats to file."
   (interactive)
   (keats-write))
+
+(defun keats-interactive-search ()
+  "Shortcut to `keats-search'."
+  (interactive)
+  (let ((inhibit-read-only t))
+    (keats-search (read-string "Query: "))))
 
 (defun keats-interactive-run (arg)
   "Runs command for with key at point is connected to.
