@@ -192,6 +192,7 @@ With prefix argument, kill interactive buffer before executing command."
 (defun keats-interactive-move (function)
   "Helper for moving up and down in list. Makes sure that correct
 lines are highlighted."
+  (goto-char (line-beginning-position))
   (keats-interactive-put-text-property 'face nil)
   (funcall function)
   (keats-interactive-put-text-property 'face 'keats-interactive-highlight))
