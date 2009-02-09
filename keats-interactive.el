@@ -216,9 +216,14 @@ lines are highlighted."
   "Removes keat at point from list (not from memory)."
   (let ((inhibit-read-only t))
     (delete-region (line-beginning-position) (line-end-position))
-    (when whole-line
-      (delete-char 1)
-      (keats-interactive-previous))))
+    (if whole-line
+        (cond ((and (eobp) (> (line-number-at-pos nil) (+ keats-interactive-title-height 1)))
+               (backward-delete-char 1)
+               (keats-interactive-put-text-property 'face 'keats-interactive-highlight)
+               (goto-char (line-beginning-position)))
+              (t
+               (delete-char 1)
+               (keats-interactive-previous))))))
 
 (defun keats-interactive-key-at-point ()
   "Returns key at point."
