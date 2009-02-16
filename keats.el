@@ -174,6 +174,10 @@
 without auto saving. nil value means no auto saving."
   :group 'keats)
 
+(defcustom keats-to-string-delimiter ": "
+  "Delimiter to muse when printing a key and description."
+  :group 'keats)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun keats-add (&optional key description)
@@ -310,7 +314,7 @@ exits. If it does exists, the description is updated."
 
 (defun keats-to-string (keat)
   "Returns a string representation of a keat."
-  (concat (plist-get keat :key) ": " (plist-get keat :description)))
+  (concat (plist-get keat :key) keats-to-string-delimiter (plist-get keat :description)))
 
 (defun keats-file-exists-p ()
   "Returns true if keats file exists. False otherwise."

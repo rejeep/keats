@@ -228,7 +228,7 @@ lines are highlighted."
 (defun keats-interactive-key-at-point ()
   "Returns key at point."
   (let ((line (buffer-substring (line-beginning-position) (line-end-position))))
-    (string-match "^\\(.*\\):" line)
+    (string-match (concat "^\\(.*\\)" keats-to-string-delimiter) line)
     (match-string-no-properties 1 line)))
 
 (defun keats-interactive-put-text-property (prop val &optional beg end)
