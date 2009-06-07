@@ -59,23 +59,6 @@
 ;; file you can change it yourself:
 ;; (setq keats-file "~/emacs.d/keats")
 ;;
-;; All keats are by default stored in `keats-file' in the format
-;; "Key|Description". The pipe (|) is used as a delimiter. You can
-;; change the delimiter by changing the variable `keats-delimiter':
-;; (setq keats-delimiter ":")
-;;
-;; You can not however change this to whatever you want. For example a
-;; whitespace will not work since both a key sequence and a
-;; description may contain white spaces. Also be aware of that
-;; `keats-delimiter' is used in some regular expressions. This means
-;; that if you want to use for example a dot (.) as a delimiter, you
-;; must escape it:
-;; (setq keats-delimiter "\.")
-;;
-;; Note that you can not change the value of this variable when you
-;; have keats in `keats-file'. You then manually have to update the
-;; delimiter in that file.
-;;
 ;; For each add, edit and delete `keats-save-count' is increased by
 ;; one if `keats-save-at' is non nil. When `keats-save-count' is
 ;; (larger or) equal to `keats-save-at', `keats-list' is written to
@@ -160,13 +143,6 @@
 
 (defcustom keats-file "~/.keats"
   "Path to file where keats are stored."
-  :group 'keats)
-
-(defcustom keats-delimiter "|"
-  "The delimiter used in `keats-file' to separate the key from
-  the description. Don't change this when you already have
-  contents in your `keats-file'. If you do this, old keats will
-  not be recognized."
   :group 'keats)
 
 (defcustom keats-save-at 5
