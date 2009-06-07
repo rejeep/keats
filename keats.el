@@ -330,9 +330,7 @@ there has been enough changes. But only if `keats-save-at' is non nil."
       (kill-this-buffer))
     (when (keats-file-valid-p)
       (keats-read))
-    (add-hook 'kill-emacs-hook
-              (lambda()
-                (keats-write))))
+    (add-hook 'kill-emacs-hook 'keats-write))
   (unless (keats-file-valid-p)
     (error "No valid keats file")))
 
