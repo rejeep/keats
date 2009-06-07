@@ -261,13 +261,15 @@ without auto saving. nil value means no auto saving."
 (defun keats-write ()
   "Writes `keats-list' to `keats-file'."
   (interactive)
-  (find-file-literally keats-file)
-  (delete-region (point-min) (point-max))
-  (dolist (plist keats-list)
-    (insert (concat (plist-get plist :key) keats-delimiter (plist-get plist :description) "\n")))
-  (save-buffer)
-  (kill-this-buffer)
-  (setq keats-save-count 0))
+  (with-temp-file (expand-file-name keats-file)
+    (insert (pp-to-string keats-list))))
+
+(defun keats-read ()
+  "Reads `keats-list' from `keats-file'."
+  (interactive)
+  (with-temp-buffer
+    (insert-file-contents keats-file)
+    (setq keats-list (read (current-buffer)))))
 
 (defun keats-read-key (arg)
   "Reads a key sequence from the keyboard. To end input, press
@@ -351,13 +353,7 @@ there has been enough changes. But only if `keats-save-at' is non nil."
       (write-file keats-file nil)
       (kill-this-buffer))
     (when (keats-file-valid-p)
-      (switch-to-buffer (get-buffer-create keats-temp-buffer))
-      (delete-region (point-min) (point-max))
-      (insert-file keats-file)
-      (goto-char (point-min))
-      (while (re-search-forward (concat "^\\(.*\\)" keats-delimiter "\\(.*\\)$") nil t)
-        (keats-add-to-list (match-string-no-properties 1) (match-string-no-properties 2)))
-      (kill-this-buffer))
+      (keats-read))
     (add-hook 'kill-emacs-hook
               (lambda()
                 (keats-write))))
