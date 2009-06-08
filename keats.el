@@ -238,7 +238,8 @@ without auto saving. nil value means no auto saving."
   "Writes `keats-list' to `keats-file'."
   (interactive)
   (with-temp-file (expand-file-name keats-file)
-    (insert (pp-to-string keats-list))))
+    (insert (pp-to-string keats-list)))
+  (setq keats-save-count 0))
 
 (defun keats-read ()
   "Reads `keats-list' from `keats-file'."
