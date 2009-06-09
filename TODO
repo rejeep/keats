@@ -2,6 +2,7 @@
 
 * Keats mode [0%]
   - [ ] Add tag support
+  - [ ] keats.el really should be two files. One "model" and one "view".
 
 * Keats Interactive mode [0%]
   - [ ] Add option to align on to string delimiter
