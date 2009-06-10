@@ -1,0 +1,6 @@
+-*- mode: Org -*-
+
+* 2009-06-08: Keats stores all keats in a different format. If you
+  have keats in the old format. Please make sure to convert them to
+  the new format (see keats-convert.el) before you use the new
+  version. Thanks: Kyle Hargraves (http://github.com/pd)
