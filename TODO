@@ -10,3 +10,6 @@
 * Keats Interactive mode [0%]
   - [ ] Add option to align on to string delimiter
   - [ ] Add option to mark whole line or only the text.
+
+* Tests [0%]
+  - [ ] Write tests using ETest.
