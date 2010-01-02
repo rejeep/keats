@@ -319,6 +319,7 @@ there has been enough changes. But only if `keats-save-at' is non nil."
     (if (>= keats-save-count keats-save-at)
         (keats-write))))
 
+;;;###autoload
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
   :init-value nil
