@@ -8,6 +8,7 @@
 ;; Keywords: convenience, help
 ;; URL: http://github.com/rejeep/keats
 ;; Package-Requires: ((keats-mode "1.0.0") (easy-menu))
+
 ;; This file is NOT part of GNU Emacs.
 
 ;;; License:
