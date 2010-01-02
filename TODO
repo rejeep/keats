@@ -1,12 +1,12 @@
 -*- mode: Org -*-
 
-* Common [0%]
+* TODO Common [0%]
   - [ ] Make sure file comments follow Emacs standards (see http://www.gnu.org/software/emacs/elisp-manual/html_node/Library-Headers.html)
-* Keats mode [0%]
+* TODO Keats mode [0%]
   - [ ] Add tag support
   - [ ] keats.el really should be two files. One "model" and one "view".
-* Keats Interactive mode [0%]
+* TODO Keats Interactive mode [0%]
   - [ ] Add option to align on to string delimiter
   - [ ] Add option to mark whole line or only the text.
-* Tests [0%]
+* TODO Tests [0%]
   - [ ] Write tests
