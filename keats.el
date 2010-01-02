@@ -1,79 +1,60 @@
 ;;; keats.el --- Keybinding Cheats
 
-;; Copyright 2009  Johan Andersson
+;; Copyright (C) 2009 Johan Andersson
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; License ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; This program is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation; either version 2 of
-;; the License, or (at your option) any later version.
-;;
-;; This program is distributed in the hope that it will be
-;; useful, but WITHOUT ANY WARRANTY; without even the implied
-;; warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-;; PURPOSE.  See the GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public
-;; License along with this program; if not, write to the Free
-;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-;; MA 02111-1307 USA
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Author: Johan Andersson <johan.rejeep@gmail.com>
+;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
+;; Version: 0.0.1
+;; Keywords: convenience, help
+;; URL: http://github.com/rejeep/keats
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; Vocabulary ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Keat - Is a short for Keybinding Cheat.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; This file is NOT part of GNU Emacs.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;; Description ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; Keats is a mode that one can say is an interface to a cheats file
-;; containing Emacs keyboard shortcuts (shortcut and
-;; description). With this mode you can easy add, edit, remove, show
-;; and search your keats without having to leave the buffer you are
-;; currently working in.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; License:
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;; Installation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; To use this mode you first have to make sure that this file is in
-;; your load-path variable:
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Commentary:
+
+;; Keats is a mode for storing notes about Emacs key bindings so you
+;; easier remember them.
+
+;; To use Keats, make sure that this file is in Emacs load-path
 ;; (add-to-list 'load-path "/path/to/directory/or/file")
 ;;
-;; Then require it:
+;; Then require Keats
 ;; (require 'keats)
-;;
-;; Then start it:
-;; (keats-mode t) or M-x keats-mode
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; Commentary ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; This mode stores all keats in the file given by the variable
-;; `keats-file'. The default value is a hidden file named .keats that
-;; will end up in your HOME folder. If you are not happy with that
-;; file you can change it yourself:
+;; To start Keats
+;; (keats-mode t) or M-x keats-mode
+
+;; Keats stores all keats in the file given by the variable
+;; `keats-file'. Change to whatever suits you.
 ;; (setq keats-file "~/emacs.d/keats")
-;;
-;; For each add, edit and delete `keats-save-count' is increased by
-;; one if `keats-save-at' is non nil. When `keats-save-count' is
-;; (larger or) equal to `keats-save-at', `keats-list' is written to
-;; `keats-file'. You can change the value of `keats-save-at' if you
-;; want to write to file more less or often, or not at all. nil value
-;; means to not auto save at all.
-;;
-;; Many of the commands will prompt you for a key sequence. To enter
-;; one, start type the sequence and when done press RET
-;; (enter/return). If you want to abort, press C-g. To type key by
-;; hand, give prefix key (C-u). This will give a prompt where the key
-;; sequence can be typed by hand. This is useful if the key contains
-;; "C-g" or "RET" normally would abort or continue. This will also
-;; give completion. It's also usefull if you want to enter something
-;; else than a key sequence, such as a function name.
+
+;; When you add, edit and delete keats Keats will automatically save
+;; the keats to `keats-file'. The number of changes before save is
+;; determined by `keats-save-at'. Set to nil if no auto saving should
+;; be done.
+
+;; Many of the Keats commands will prompt for a key sequence. To enter
+;; one, start type the sequence and when done press RET. If you want
+;; to abort, press C-g. To type a key by hand, give prefix key
+;; (C-u). In this prompt the key sequence can be typed by hand. This
+;; is useful if the key contains "C-g" or "RET".
 ;;
 ;; == ADD (C-c k a)
 ;; Will add a new keat if it does not already exist. If it does exists
@@ -90,31 +71,17 @@
 ;; Removes a keat.
 ;;
 ;; == WRITE (C-c k w)
-;; Writes `keats-list' to file. This is done every time Emacs is
-;; killed.
+;; Writes `keats-list' to file. This is done every time Emacs is killed.
 ;;
 ;; == SEARCH (C-c k s)
-;; Searches regularly, without respect to case, in description for a
-;; given regexp. If none is found, a message is printed. If there's at
-;; least one hit, `keats-interactive-mode' is started showing all
-;; matching keats.
+;; Searches (without respect to case) in keat descriptions for a given
+;; regexp. If there's at least one hit, `keats-interactive-mode' is
+;; started showing all matching keats.
 ;;
 ;; == INTERACTIVE (C-c k i)
-;; Opens `keats-interactive-mode' with all keats.
-;;
-;; Note that even though this might not be a common usage, all of the
-;; above action can be called from a lisp program:
-;; (keats-add "C-x C-f" "Opens file")
-;; (keats-edit "C-x C-f" "Opens file is a new buffer")
-;; (keats-print-description "C-x C-f")
-;; (keats-search "buffer")
-;; (keats-remove "C-x C-f")
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Opens `keats-interactive-mode'.
 
 ;;; Code:
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defconst keats-temp-buffer "*Keats*"
   "Temp buffer.")
@@ -153,8 +120,6 @@ without auto saving. nil value means no auto saving."
 (defcustom keats-to-string-delimiter ": "
   "Delimiter to muse when printing a key and description."
   :group 'keats)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; Functions ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun keats-add (&optional key description)
   "Adds a keat if it does not already exist. If it exists,
