@@ -1,6 +1,0 @@
-Keats is a mode for storing notes about Emacs key bindings so you
-easier remember them.
-
-Read source file comments for information on how to install and use.
-
-For Gentoo users, there's an ebuild for the mode at http://github.com/rejeep/ebuilds
