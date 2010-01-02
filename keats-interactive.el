@@ -1,46 +1,47 @@
-;;; keats-interactive.el --- Interactive mode for Keats mode.
+;;; keats-interactive.el --- Interactive mode for Keats mode
 
-;; Copyright 2009  Johan Andersson
+;; Copyright (C) 2009 Johan Andersson
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;; License ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; This program is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License as
-;; published by the Free Software Foundation; either version 2 of
-;; the License, or (at your option) any later version.
-;;
-;; This program is distributed in the hope that it will be
-;; useful, but WITHOUT ANY WARRANTY; without even the implied
-;; warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
-;; PURPOSE.  See the GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public
-;; License along with this program; if not, write to the Free
-;; Software Foundation, Inc., 59 Temple Place, Suite 330, Boston,
-;; MA 02111-1307 USA
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Author: Johan Andersson <johan.rejeep@gmail.com>
+;; Maintainer: Johan Andersson <johan.rejeep@gmail.com>
+;; Version: 0.0.1
+;; Keywords: convenience, help
+;; URL: http://github.com/rejeep/keats
+;; Package-Requires: ((keats-mode "1.0.0") (easy-menu))
+;; This file is NOT part of GNU Emacs.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;; Description ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;;; License:
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation; either version 3, or (at your option)
+;; any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with GNU Emacs; see the file COPYING.  If not, write to the
+;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+;; Boston, MA 02110-1301, USA.
+
+;;; Commentary:
+
 ;; This mode is an extension to `keats-mode'. This mode adds extends
-;; Keats mode with an interactive part.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Keats mode with an interactive interface.
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;; Installation ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
-;; To use this mode you first have to make sure that this file is in
-;; your load-path variable:
+;; To using Keats Interactive mode, make sure that this file is in
+;; Emacs load-path
 ;; (add-to-list 'load-path "/path/to/directory/or/file")
 ;;
-;; Then require it:
+;; Then require Keats
 ;; (require 'keats-interactive)
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; Commentary ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;
+;; To start Keats
+;; (keats-interactive-mode t) or M-x keats-interactive-mode
+
 ;; You are most likely to use this mode if you want to add, edit or
 ;; remove many keats at the same time. In this mode these keybindings
 ;; are set:
@@ -55,15 +56,11 @@
 ;;  * RET - Runs command for which key at point is connected to. With
 ;;    prefix argument (C-u) the interactive buffer is closed before
 ;;    the command is executed.
-;;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; Code:
 
 (require 'keats)
 (require 'easymenu)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;; Variables ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defconst keats-interactive-temp-buffer "*Keats Interactive*"
   "Buffer used for this mode.")
@@ -253,6 +250,7 @@ nil."
     (keats-interactive-put-text-property 'face 'keats-interactive-title min max)
     (newline)))
 
+;;;###autoload
 (defun keats-interactive-mode (title)
   "Major mode to interactively manage Keats."
   (switch-to-buffer (get-buffer-create keats-interactive-temp-buffer))
