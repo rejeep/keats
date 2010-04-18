@@ -83,6 +83,8 @@
 
 ;;; Code:
 
+(add-hook 'kill-emacs-hook 'keats-write)
+
 (defconst keats-temp-buffer "*Keats*"
   "Temp buffer.")
 
@@ -284,22 +286,23 @@ there has been enough changes. But only if `keats-save-at' is non nil."
     (if (>= keats-save-count keats-save-at)
         (keats-write))))
 
+(defun keats-file-init ()
+  "Initialization for keats file."
+  (if (keats-file-exists-p)
+      (if (keats-file-valid-p)
+          (keats-read)
+        (error "Keats file is invalid!"))
+    (with-temp-buffer
+      (erase-buffer)
+      (write-file keats-file))))
+
 ;;;###autoload
 (define-minor-mode keats-mode
   "Simple interface to Emacs keybinding cheats."
   :init-value nil
   :keymap keats-mode-map
   (when keats-mode
-    (unless (keats-file-exists-p)
-      (switch-to-buffer (get-buffer-create keats-temp-buffer))
-      (delete-region (point-min) (point-max))
-      (write-file keats-file nil)
-      (kill-this-buffer))
-    (when (keats-file-valid-p)
-      (keats-read))
-    (add-hook 'kill-emacs-hook 'keats-write))
-  (unless (keats-file-valid-p)
-    (error "No valid keats file")))
+    (keats-file-init)))
 
 (provide 'keats)
 

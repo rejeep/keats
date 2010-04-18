@@ -254,6 +254,7 @@ nil."
 ;;;###autoload
 (defun keats-interactive-mode (title)
   "Major mode to interactively manage Keats."
+  (keats-file-init)
   (switch-to-buffer (get-buffer-create keats-interactive-temp-buffer))
   (delete-region (point-min) (point-max))
   (kill-all-local-variables)
