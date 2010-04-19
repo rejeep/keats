@@ -53,7 +53,8 @@
   "Adds a new keat through the popcorn interface."
   (interactive)
   (let ((keat (keats-read-keat)))
-    (keats-create keat)))
+    (if keat
+        (keats-create keat))))
 
 (defun keats-create (keat)
   "Adds KEAT to the list of keats."
@@ -67,10 +68,17 @@
     (while (not (terminating-key-p key))
       (setq res (vconcat res key))
       (setq key (keats-read-key prompt (key-description res))))
-    ;; Read the description
-    (if (string= (key-description key) "RET")
-        (setq description (read-string "Description: ")))
-    (make-keats-keat :key (key-description res) :description description)))
+    (when (string= (key-description key) "RET")
+      ;; Read the description
+      (setq description (read-string "Description: "))
+      (let ((keat (make-keats-keat :key (key-description res) :description description)))
+        (if (keats-valid-keat-p keat) keat)))))
+
+(defun keats-valid-keat-p (keat)
+  "Returns t if KEAT is valid, nil otherwise."
+  (let ((key (keats-keat-key keat))
+        (description (keats-keat-description keat)))
+    (not (or (string= key "") (string= description "")))))
 
 (defun terminating-key-p (key)
   "Returns t if KEY is a terminating key, nil otherwise."
