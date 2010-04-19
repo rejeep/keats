@@ -61,12 +61,12 @@
 
 (defun keats-read-keat ()
   "Reads a key binding and a description and returns a `keats-keat' struct object."
-  (let ((cursor-in-echo-area t) (key) (description) (res))
+  (let ((cursor-in-echo-area t) (prompt "Key Binding: ") (key) (description) (res))
     ;; Read the key binding
-    (setq key (keats-read-key "Key Binding: "))
+    (setq key (keats-read-key prompt))
     (while (not (terminating-key-p key))
       (setq res (vconcat res key))
-      (setq key (keats-read-key (key-description res))))
+      (setq key (keats-read-key prompt (key-description res))))
     ;; Read the description
     (if (string= (key-description key) "RET")
         (setq description (read-string "Description: ")))
@@ -78,9 +78,10 @@
     (or (string= description "RET")
         (string= description "C-g"))))
 
-(defun keats-read-key (prompt)
+(defun keats-read-key (&rest args)
   "Reads a key sequence and returns it as a vector."
-  (read-key-sequence-vector prompt))
+  (let ((prompt (mapconcat 'identity args "")))
+    (read-key-sequence-vector prompt)))
 
 
 (provide 'keats)
