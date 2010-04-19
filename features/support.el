@@ -9,3 +9,7 @@
 (require 'keats)
 (require 'ert)
 (require 'espuds)
+
+(After
+ (setq keats-list ())
+ )
