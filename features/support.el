@@ -4,6 +4,8 @@
 
 (add-to-list 'load-path keats-root-path)
 (add-to-list 'load-path (expand-file-name "espuds" keats-util-path))
+(add-to-list 'load-path (expand-file-name "ert" keats-util-path))
 
 (require 'keats)
+(require 'ert)
 (require 'espuds)
