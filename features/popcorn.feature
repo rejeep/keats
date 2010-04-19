@@ -1,4 +1,4 @@
-Feature: Popcorn
+Feature: Popcorn Interface
   In order to manage Keats through Popcorn
   As an Emacs user
   I want a simple interface to the Keats
