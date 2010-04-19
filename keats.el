@@ -31,6 +31,57 @@
 
 ;;; Code:
 
+(eval-when-compile
+  (require 'cl))
+
+(defstruct keats-keat key description)
+
+
+(defvar keats-list ()
+  "List containing all keats as `keats-keat' struct objects.")
+
+(defvar keats-popcorn-mode-map (make-sparse-keymap)
+  "Keymap for popcorn.")
+
+(define-prefix-command 'keats-popcorn-mode-map)
+(global-set-key (kbd "C-c k") 'keats-popcorn-mode-map)
+(let ((map keats-popcorn-mode-map))
+  (define-key map (kbd "n") 'keats-popcorn-new))
+
+
+(defun keats-popcorn-new ()
+  "Adds a new keat through the popcorn interface."
+  (interactive)
+  (let ((keat (keats-read-keat)))
+    (keats-create keat)))
+
+(defun keats-create (keat)
+  "Adds KEAT to the list of keats."
+  (add-to-list 'keats-list keat t))
+
+(defun keats-read-keat ()
+  "Reads a key binding and a description and returns a `keats-keat' struct object."
+  (let ((cursor-in-echo-area t) (key) (description) (res))
+    ;; Read the key binding
+    (setq key (keats-read-key "Key Binding: "))
+    (while (not (terminating-key-p key))
+      (setq res (vconcat res key))
+      (setq key (keats-read-key (key-description res))))
+    ;; Read the description
+    (if (string= (key-description key) "RET")
+        (setq description (read-string "Description: ")))
+    (make-keats-keat :key (key-description res) :description description)))
+
+(defun terminating-key-p (key)
+  "Returns t if KEY is a terminating key, nil otherwise."
+  (let ((description (key-description key)))
+    (or (string= description "RET")
+        (string= description "C-g"))))
+
+(defun keats-read-key (prompt)
+  "Reads a key sequence and returns it as a vector."
+  (read-key-sequence-vector prompt))
+
 
 (provide 'keats)
 
