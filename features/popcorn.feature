@@ -12,6 +12,7 @@ Feature: Popcorn Interface
     And I press "RET"
     And I execute the action chain
     Then I should have one keat with key "C-x b" and description "Switches to another buffer"
+    And I should see message "Successfully added keat for C-x b"
 
   Scenario: Abort adding new keat in key binding phase
     Given I start an action chain
@@ -20,6 +21,7 @@ Feature: Popcorn Interface
     And I press "C-g"
     And I execute the action chain
     Then I should have 0 keats
+    And I should see message "Keat is invalid and was not added"
     
   # TODO: How to make this work?
   # Scenario: Abort adding new keat in description phase
