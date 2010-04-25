@@ -96,6 +96,7 @@
   (let ((prompt (mapconcat 'identity args "")))
     (read-key-sequence-vector prompt)))
 
+
 (define-minor-mode keats-mode
   "Keybinding Cheats."
   :init-value nil
@@ -104,6 +105,7 @@
   (if keats-mode
       (local-set-key keats-prefix-key 'keats-mode-map)
     (local-unset-key keats-prefix-key)))
+
 
 (provide 'keats)
 
