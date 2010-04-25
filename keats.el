@@ -40,17 +40,17 @@
 (defvar keats-list ()
   "List containing all keats as `keats-keat' struct objects.")
 
-(defvar keats-popcorn-mode-map (make-sparse-keymap)
-  "Keymap for popcorn.")
+(defvar keats-mode-map (make-sparse-keymap)
+  "Keymap for `keats-mode'.")
 
-(define-prefix-command 'keats-popcorn-mode-map)
-(global-set-key (kbd "C-c k") 'keats-popcorn-mode-map)
-(let ((map keats-popcorn-mode-map))
-  (define-key map (kbd "n") 'keats-popcorn-new))
+(define-prefix-command 'keats-mode-map)
+(global-set-key (kbd "C-c k") 'keats-mode-map)
+(let ((map keats-mode-map))
+  (define-key map (kbd "n") 'keats-new))
 
 
-(defun keats-popcorn-new ()
-  "Adds a new keat through the popcorn interface."
+(defun keats-new ()
+  "Adds a new keat."
   (interactive)
   (let ((keat (keats-read-keat)))
     (keats-create keat)))

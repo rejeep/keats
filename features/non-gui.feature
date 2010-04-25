@@ -1,5 +1,5 @@
-Feature: Popcorn Interface
-  In order to manage Keats through Popcorn
+Feature: Non GUI Interface
+  In order to manage Keats without a GUI
   As an Emacs user
   I want a simple interface to the Keats
 
