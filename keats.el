@@ -53,12 +53,14 @@
   "Adds a new keat through the popcorn interface."
   (interactive)
   (let ((keat (keats-read-keat)))
-    (if keat
-        (keats-create keat))))
+    (keats-create keat)))
 
 (defun keats-create (keat)
   "Adds KEAT to the list of keats."
-  (add-to-list 'keats-list keat t))
+  (cond ((keats-valid-keat-p keat)
+         (add-to-list 'keats-list keat t)
+         (message "Successfully added keat for %s" (keats-keat-key keat)))
+        (t (message "Keat is invalid and was not added"))))
 
 (defun keats-read-keat ()
   "Reads a key binding and a description and returns a `keats-keat' struct object."
@@ -71,8 +73,7 @@
     (when (string= (key-description key) "RET")
       ;; Read the description
       (setq description (read-string "Description: "))
-      (let ((keat (make-keats-keat :key (key-description res) :description description)))
-        (if (keats-valid-keat-p keat) keat)))))
+      (make-keats-keat :key (key-description res) :description description))))
 
 (defun keats-valid-keat-p (keat)
   "Returns t if KEAT is valid, nil otherwise."
