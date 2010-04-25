@@ -1,5 +1,5 @@
-Feature: Non GUI Interface
-  In order to manage Keats without a GUI
+Feature: Keats Mode
+  In order to manage Keats
   As an Emacs user
   I want a simple interface to the Keats
 
