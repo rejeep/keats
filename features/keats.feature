@@ -53,7 +53,7 @@ Feature: Keats Mode
     And I execute the action chain
     Then I should have 0 keats
     
-  Scenario: Invalid key binding
+  Scenario: Invalid description
     Given I start an action chain
     When I press "C-c k n"
     And I press "C-x b"
