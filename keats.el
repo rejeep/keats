@@ -103,7 +103,8 @@
     (cond (keats-mode
            (define-prefix-command 'keats-mode-map)
            (local-set-key prefix 'keats-mode-map)
-           (define-key keats-mode-map (kbd "n") 'keats-new))
+           (let ((map keats-mode-map))
+             (define-key map (kbd "n") 'keats-new)))
           (t (local-unset-key prefix)))))
 
 
