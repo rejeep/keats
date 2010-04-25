@@ -44,9 +44,9 @@
   "Keymap for `keats-mode'.")
 
 (define-prefix-command 'keats-mode-map)
-(global-set-key (kbd "C-c k") 'keats-mode-map)
 (let ((map keats-mode-map))
-  (define-key map (kbd "n") 'keats-new))
+  (define-key map (kbd "n") 'keats-new)
+  map)
 
 
 (defun keats-new ()
@@ -93,6 +93,15 @@
   (let ((prompt (mapconcat 'identity args "")))
     (read-key-sequence-vector prompt)))
 
+(define-minor-mode keats-mode
+  "Keybinding Cheats."
+  :init-value nil
+  :lighter " Keats"
+  :keymap keats-mode-map
+  (let ((prefix (kbd "C-c k")))
+    (if keats-mode
+        (local-set-key prefix 'keats-mode-map)
+      (local-unset-key prefix))))
 
 (provide 'keats)
 

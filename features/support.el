@@ -10,6 +10,10 @@
 (require 'ert)
 (require 'espuds)
 
+(Before
+ (keats-mode -1)
+ )
+
 (After
  (setq keats-list ())
  )

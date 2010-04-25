@@ -8,3 +8,14 @@
 (Then "^I should have \\([0-9]+\\) keats?$"
       (lambda (count)
         (should (equal (string-to-int count) (length keats-list)))))
+
+(Given "^I \\(enable\\|disable\\) keats-mode$"
+       (lambda (status)
+         (if (string= status "enable")
+             (keats-mode 1)
+           (keats-mode -1))))
+
+(Then "^the prefix should be \\(enabled\\|disabled\\)$"
+      (lambda (status)
+        (if (string= status "enabled")
+            (should (key-binding (read-kbd-macro "C-c k"))))))

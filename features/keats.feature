@@ -2,7 +2,16 @@ Feature: Keats Mode
   In order to manage Keats
   As an Emacs user
   I want a simple interface to the Keats
-
+  
+  Background:
+    Given I enable keats-mode
+  
+  Scenario: Disable prefix key
+    Given I enable keats-mode
+    Then the prefix should be enabled
+    When I disable keats-mode
+    Then the prefix should be disabled
+    
   Scenario: Add new keat
     Given I start an action chain
     When I press "C-c k n"
