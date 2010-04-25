@@ -30,7 +30,6 @@ Feature: Keats Mode
     And I press "C-g"
     And I execute the action chain
     Then I should have 0 keats
-    And I should see message "Keat is invalid and was not added"
     
   # TODO: How to make this work?
   # Scenario: Abort adding new keat in description phase
@@ -52,6 +51,7 @@ Feature: Keats Mode
     And I press "RET"
     And I execute the action chain
     Then I should have 0 keats
+    And I should see message "Keat is invalid and was not added"
     
   Scenario: Invalid description
     Given I start an action chain
@@ -62,3 +62,4 @@ Feature: Keats Mode
     And I press "RET"
     And I execute the action chain
     Then I should have 0 keats
+    And I should see message "Keat is invalid and was not added"

@@ -55,10 +55,11 @@
 
 (defun keats-create (keat)
   "Adds KEAT to the list of keats."
-  (cond ((keats-valid-keat-p keat)
-         (add-to-list 'keats-list keat t)
-         (message "Successfully added keat for %s" (keats-keat-key keat)))
-        (t (message "Keat is invalid and was not added"))))
+  (when keat
+    (cond ((keats-valid-keat-p keat)
+           (add-to-list 'keats-list keat t)
+           (message "Successfully added keat for %s" (keats-keat-key keat)))
+          (t (message "Keat is invalid and was not added")))))
 
 (defun keats-read-keat ()
   "Reads a key binding and a description and returns a `keats-keat' struct object."
