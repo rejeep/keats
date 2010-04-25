@@ -14,6 +14,7 @@
   (let ((keats
          (list
           (make-keats-keat :key ""      :description "Valid")
-          (make-keats-keat :key "C-x b" :description ""))))
+          (make-keats-keat :key "C-x b" :description "")
+          nil)))
     (dolist (keat keats)
       (should-not (keats-valid-keat-p keat)))))

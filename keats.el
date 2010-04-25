@@ -76,9 +76,10 @@
 
 (defun keats-valid-keat-p (keat)
   "Returns t if KEAT is valid, nil otherwise."
-  (let ((key (keats-keat-key keat))
-        (description (keats-keat-description keat)))
-    (not (or (string= key "") (string= description "")))))
+  (and (keats-keat-p keat)
+       (let ((key (keats-keat-key keat))
+             (description (keats-keat-description keat)))
+         (not (or (string= key "") (string= description ""))))))
 
 (defun terminating-key-p (key)
   "Returns t if KEY is a terminating key, nil otherwise."
