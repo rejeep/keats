@@ -40,6 +40,9 @@
 (defvar keats-list ()
   "List containing all keats as `keats-keat' struct objects.")
 
+(defvar keats-prefix-key "C-c k"
+  "Prefix key for `keats-mode'.")
+
 (defvar keats-mode-map (make-sparse-keymap)
   "Keymap for `keats-mode'.")
 
@@ -98,10 +101,9 @@
   :init-value nil
   :lighter " Keats"
   :keymap keats-mode-map
-  (let ((prefix (kbd "C-c k")))
-    (if keats-mode
-        (local-set-key prefix 'keats-mode-map)
-      (local-unset-key prefix))))
+  (if keats-mode
+      (local-set-key keats-prefix-key 'keats-mode-map)
+    (local-unset-key keats-prefix-key)))
 
 (provide 'keats)
 

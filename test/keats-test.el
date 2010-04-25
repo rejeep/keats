@@ -18,3 +18,6 @@
           nil)))
     (dolist (keat keats)
       (should-not (keats-valid-keat-p keat)))))
+
+(ert-deftest prefix-key ()
+  (should (equal "C-c k" keats-prefix-key)))
