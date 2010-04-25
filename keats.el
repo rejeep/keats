@@ -92,6 +92,7 @@
     (read-key-sequence-vector prompt)))
 
 
+;;;###autoload
 (define-minor-mode keats-mode
   "Keybinding Cheats."
   :init-value nil
