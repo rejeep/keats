@@ -46,11 +46,6 @@
 (defvar keats-mode-map (make-sparse-keymap)
   "Keymap for `keats-mode'.")
 
-(define-prefix-command 'keats-mode-map)
-(let ((map keats-mode-map))
-  (define-key map (kbd "n") 'keats-new)
-  map)
-
 
 (defun keats-new ()
   "Adds a new keat."
@@ -102,9 +97,12 @@
   :init-value nil
   :lighter " Keats"
   :keymap keats-mode-map
-  (if keats-mode
-      (local-set-key keats-prefix-key 'keats-mode-map)
-    (local-unset-key keats-prefix-key)))
+  (let ((prefix (read-kbd-macro keats-prefix-key)))
+    (cond (keats-mode
+           (define-prefix-command 'keats-mode-map)
+           (local-set-key prefix 'keats-mode-map)
+           (define-key keats-mode-map (kbd "n") 'keats-new))
+          (t (local-unset-key prefix)))))
 
 
 (provide 'keats)
