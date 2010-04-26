@@ -57,8 +57,11 @@
   "Adds KEAT to the list of keats."
   (when keat
     (cond ((keats-valid-keat-p keat)
-           (add-to-list 'keats-list keat t)
-           (message "Successfully added keat for %s" (keats-keat-key keat)))
+           (if (keats-exists-p keat)
+               (message "Keat for key %s already defined" (keats-keat-key keat))
+             (progn
+               (add-to-list 'keats-list keat t)
+               (message "Successfully added keat for %s" (keats-keat-key keat)))))
           (t (message "Keat is invalid and was not added")))))
 
 (defun keats-read-keat ()
@@ -91,6 +94,13 @@
   "Reads a key sequence and returns it as a vector."
   (let ((prompt (mapconcat 'identity args "")))
     (read-key-sequence-vector prompt)))
+
+(defun keats-exists-p (keat)
+  "Returns t if KEAT is already defined, nil otherwise."
+  (let ((compare-fn
+         (lambda (k1 k2)
+           (equal (keats-keat-key k1) (keats-keat-key k2)))))
+    (find keat keats-list :test compare-fn)))
 
 
 ;;;###autoload

@@ -19,3 +19,7 @@
       (lambda (status)
         (if (string= status "enabled")
             (should (key-binding (read-kbd-macro "C-c k"))))))
+
+(Given "^I have one keat with key \"\\(.+\\)\" and description \"\\(.+\\)\"$"
+       (lambda (key description)
+         (add-to-list 'keats-list (make-keats-keat :key key :description description) t)))
