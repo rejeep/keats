@@ -56,26 +56,41 @@
 (defun keats-create (keat)
   "Adds KEAT to the list of keats."
   (when keat
-    (cond ((keats-valid-keat-p keat)
-           (if (keats-exists-p keat)
-               (message "Keat for key %s already defined" (keats-keat-key keat))
-             (progn
-               (add-to-list 'keats-list keat t)
-               (message "Successfully added keat for %s" (keats-keat-key keat)))))
-          (t (message "Keat is invalid and was not added")))))
+    (condition-case err
+        (cond ((keats-valid-keat-p keat)
+               (keats-add keat)
+               (message "Successfully added keat for %s" (keats-keat-key keat)))
+              (t
+               (message "Keat is invalid and was not added")))
+      (error
+       (message (error-message-string err))))))
+
+(defun keats-add (keat)
+  "Adds KEAT to the list of keats."
+  (add-to-list 'keats-list keat t))
 
 (defun keats-read-keat ()
   "Reads a key binding and a description and returns a `keats-keat' struct object."
-  (let ((cursor-in-echo-area t) (prompt "Key Binding: ") (key) (description) (res))
-    ;; Read the key binding
-    (setq key (keats-read-key prompt))
-    (while (not (terminating-key-p key))
+  (let ((cursor-in-echo-area t) (key (keats-read-key)))
+    (when key
+      (if (keats-exists-p key)
+          (error "Keat for key %s already defined" key)
+        (let ((description (keats-read-description)))
+          (make-keats-keat :key key :description description))))))
+
+(defun keats-read-key ()
+  "Reads a keat key from the minibuffer."
+  (let ((prompt "Key Binding: ") key description res)
+    (setq key (read-key-sequence-vector prompt))
+    (while (not (keats-terminating-key-p key))
       (setq res (vconcat res key))
-      (setq key (keats-read-key prompt (key-description res))))
-    (when (string= (key-description key) "RET")
-      ;; Read the description
-      (setq description (read-string "Description: "))
-      (make-keats-keat :key (key-description res) :description description))))
+      (setq key (read-key-sequence-vector (concat prompt (key-description res)))))
+    (if (string= (key-description key) "RET")
+        (key-description res))))
+
+(defun keats-read-description ()
+  "Reads a keat description from the minibuffer."
+  (read-string "Description: "))
 
 (defun keats-valid-keat-p (keat)
   "Returns t if KEAT is valid, nil otherwise."
@@ -84,23 +99,15 @@
              (description (keats-keat-description keat)))
          (not (or (string= key "") (string= description ""))))))
 
-(defun terminating-key-p (key)
+(defun keats-terminating-key-p (key)
   "Returns t if KEY is a terminating key, nil otherwise."
   (let ((description (key-description key)))
     (or (string= description "RET")
         (string= description "C-g"))))
 
-(defun keats-read-key (&rest args)
-  "Reads a key sequence and returns it as a vector."
-  (let ((prompt (mapconcat 'identity args "")))
-    (read-key-sequence-vector prompt)))
-
-(defun keats-exists-p (keat)
-  "Returns t if KEAT is already defined, nil otherwise."
-  (let ((compare-fn
-         (lambda (k1 k2)
-           (equal (keats-keat-key k1) (keats-keat-key k2)))))
-    (find keat keats-list :test compare-fn)))
+(defun keats-exists-p (key)
+  "Returns t if KEY is already defined, nil otherwise."
+  (some (lambda (keat) (equal (keats-keat-key keat) key)) keats-list))
 
 
 ;;;###autoload
