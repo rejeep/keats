@@ -7,9 +7,11 @@
 
 (add-to-list 'load-path keats-root-path)
 (add-to-list 'load-path (expand-file-name "ert" keats-util-path))
+(add-to-list 'load-path (expand-file-name "el-mock" keats-util-path))
 
 (require 'keats)
 (require 'ert)
+(require 'el-mock)
 
 (dolist (test-file (or argv (directory-files keats-test-path t "-test.el")))
   (load-file test-file))
