@@ -71,7 +71,7 @@
 
 (defun keats-read-keat ()
   "Reads a key binding and a description and returns a `keats-keat' struct object."
-  (let ((cursor-in-echo-area t) (key (keats-read-key)))
+  (let ((key (keats-read-key)))
     (when key
       (if (keats-exists-p key)
           (error "Keat for key %s already defined" key)
@@ -80,7 +80,7 @@
 
 (defun keats-read-key ()
   "Reads a keat key from the minibuffer."
-  (let ((prompt "Key Binding: ") key description res)
+  (let ((cursor-in-echo-area t) (prompt "Key Binding: ") key description res)
     (setq key (read-key-sequence-vector prompt))
     (while (not (keats-terminating-key-p key))
       (setq res (vconcat res key))
