@@ -13,8 +13,8 @@ Feature: Keats Mode
     Then the prefix should be disabled
     
   Scenario: Add new keat
-    Given I start an action chain
-    When I press "C-c k n"
+    When I start an action chain
+    And I press "C-c k n"
     And I press "C-x b"
     And I press "RET"
     And I type "Switches to another buffer"
@@ -24,8 +24,8 @@ Feature: Keats Mode
     And I should see message "Successfully added keat for C-x b"
 
   Scenario: Abort adding new keat in key binding phase
-    Given I start an action chain
-    When I press "C-c k n"
+    When I start an action chain
+    And I press "C-c k n"
     And I press "C-x b"
     And I press "C-g"
     And I execute the action chain
@@ -43,8 +43,8 @@ Feature: Keats Mode
   #   Then I should have 0 keats
 
   Scenario: Invalid key binding
-    Given I start an action chain
-    When I press "C-c k n"
+    When I start an action chain
+    And I press "C-c k n"
     And I press "RET"
     And I press "RET"
     And I type "Valid"
@@ -54,8 +54,8 @@ Feature: Keats Mode
     And I should see message "Keat is invalid and was not added"
     
   Scenario: Invalid description
-    Given I start an action chain
-    When I press "C-c k n"
+    When I start an action chain
+    And I press "C-c k n"
     And I press "C-x b"
     And I press "RET"
     # No typing
