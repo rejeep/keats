@@ -58,8 +58,9 @@
   (interactive)
   (let ((key (keats-read-key)))
     (if (keats-exists-p key)
-        (let ((description (keats-read-description))
-              (keat (keats-find key)))
+        (let* ((keat (keats-find key))
+               (old-description (keats-keat-description keat))
+               (description (keats-read-description old-description)))
           (keats-update keat description))
       (message "No keat with key %s exists" key))))
 
@@ -102,9 +103,9 @@
     (if (string= (key-description key) "RET")
         (key-description res))))
 
-(defun keats-read-description ()
+(defun keats-read-description (&optional initial-input)
   "Reads a keat description from the minibuffer."
-  (read-string "Description: "))
+  (read-string "Description: " initial-input))
 
 (defun keats-valid-keat-p (keat)
   "Returns t if KEAT is valid, nil otherwise."
