@@ -63,6 +63,18 @@
      (should (equal "C-x b" key))
      (should (equal "description" description)))))
 
+(ert-deftest find-keat-does-not-exist ()
+  (preserve-keats
+   (keats-add (make-keats-keat :key "C-x b"))
+   (should-not (keats-find "C-x C-b"))))
+
+(ert-deftest find-keat-does-exist ()
+  (preserve-keats
+   (keats-add (make-keats-keat :key "C-x b"))
+   (let ((keat (keats-find "C-x b")))
+     (should keat)
+     (should (keats-keat-p keat)))))
+
 (defmacro preserve-keats (&rest body)
   "Executes body without messing with `keats-list'."
   `(let ((keats-list))

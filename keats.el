@@ -53,6 +53,16 @@
   (let ((keat (keats-read-keat)))
     (keats-create keat)))
 
+(defun keats-edit ()
+  "Edits an already existing keat."
+  (interactive)
+  (let ((key (keats-read-key)))
+    (if (keats-exists-p key)
+        (let ((description (keats-read-description))
+              (keat (keats-find key)))
+          (setf (keats-keat-description keat) description))
+      (message "No keat with key %s exists" key))))
+
 (defun keats-create (keat)
   "Adds KEAT to the list of keats."
   (when keat
@@ -109,6 +119,13 @@
   "Returns t if KEY is already defined, nil otherwise."
   (some (lambda (keat) (equal (keats-keat-key keat) key)) keats-list))
 
+(defun keats-find (key)
+  "Returns the keat with KEY if it exists, nil otherwise."
+  (let ((compare-fn
+         (lambda (look-for keat)
+           (string= look-for (keats-keat-key keat)))))
+    (find key keats-list :test compare-fn)))
+
 
 ;;;###autoload
 (define-minor-mode keats-mode
@@ -121,7 +138,8 @@
            (define-prefix-command 'keats-mode-map)
            (local-set-key prefix 'keats-mode-map)
            (let ((map keats-mode-map))
-             (define-key map (kbd "n") 'keats-new)))
+             (define-key map (kbd "n") 'keats-new)
+             (define-key map (kbd "e") 'keats-edit)))
           (t (local-unset-key prefix)))))
 
 

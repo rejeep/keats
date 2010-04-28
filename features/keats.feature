@@ -20,7 +20,7 @@ Feature: Keats Mode
     And I type "Switches to another buffer"
     And I press "RET"
     And I execute the action chain
-    Then I should have one keat with key "C-x b" and description "Switches to another buffer"
+    Then I should have a keat with key "C-x b" and description "Switches to another buffer"
     And I should see message "Successfully added keat for C-x b"
 
   Scenario: Abort adding new keat in key binding phase
@@ -73,4 +73,23 @@ Feature: Keats Mode
   #   And I press "RET"
   #   And I execute the action chain
   #   Then I should see message "Keat for key C-x b already defined"
-  #   And I should have one keat with key "C-x b" and description "Switches to another buffer"
+  #   And I should have keat with key "C-x b" and description "Switches to another buffer"
+
+  Scenario: Edit keat
+    Given I have one keat with key "C-x b" and description "Switches to another buffer"
+    When I start an action chain
+    And I press "C-c k e"
+    And I press "C-x b"
+    And I press "RET"
+    And I type "New description"
+    And I press "RET"
+    And I execute the action chain
+    Then I should have a keat with key "C-x b" and description "New description"
+
+  Scenario: Edit non existing keat
+    When I start an action chain
+    And I press "C-c k e"
+    And I press "C-x b"
+    And I press "RET"
+    And I execute the action chain
+    Then I should see message "No keat with key C-x b exists"
