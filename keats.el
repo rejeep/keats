@@ -60,7 +60,7 @@
     (if (keats-exists-p key)
         (let ((description (keats-read-description))
               (keat (keats-find key)))
-          (setf (keats-keat-description keat) description))
+          (keats-update keat description))
       (message "No keat with key %s exists" key))))
 
 (defun keats-create (keat)
@@ -74,6 +74,10 @@
                (message "Keat is invalid and was not added")))
       (error
        (message (error-message-string err))))))
+
+(defun keats-update (keat description)
+  "Update KEAT's description."
+  (setf (keats-keat-description keat) description))
 
 (defun keats-add (keat)
   "Adds KEAT to the list of keats."

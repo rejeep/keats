@@ -75,6 +75,12 @@
      (should keat)
      (should (keats-keat-p keat)))))
 
+(ert-deftest update-keat ()
+  (let ((keat (make-keats-keat :key "C-x b" :description "old")))
+    (keats-update keat "new")
+    (should (equal "new" (keats-keat-description keat)))))
+
+
 (defmacro preserve-keats (&rest body)
   "Executes body without messing with `keats-list'."
   `(let ((keats-list))
