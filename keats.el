@@ -108,6 +108,7 @@
 
 (defun keats-remove (keat)
   "Removes KEAT from the list of keats."
+  ;; TODO: delete* should be destructive, but isn't. Why?
   (setq keats-list (delete* keat keats-list)))
 
 (defun keats-read-keat ()
