@@ -64,6 +64,16 @@
           (keats-update keat description))
       (message "No keat with key %s exists" key))))
 
+(defun keats-destroy ()
+  "Destroys an already existing keat."
+  (interactive)
+  (let ((key (keats-read-key)))
+    (cond ((keats-exists-p key)
+           (let ((keat (keats-find key)))
+             (keats-remove keat)
+             (message "Successfully destroyed keat for %s" key)))
+          (t (message "No keat with key %s exists" key)))))
+
 (defun keats-create (keat)
   "Adds KEAT to the list of keats."
   (when keat
@@ -83,6 +93,10 @@
 (defun keats-add (keat)
   "Adds KEAT to the list of keats."
   (add-to-list 'keats-list keat t))
+
+(defun keats-remove (keat)
+  "Removes KEAT from the list of keats."
+  (setq keats-list (delete* keat keats-list)))
 
 (defun keats-read-keat ()
   "Reads a key binding and a description and returns a `keats-keat' struct object."
@@ -144,7 +158,8 @@
            (local-set-key prefix 'keats-mode-map)
            (let ((map keats-mode-map))
              (define-key map (kbd "n") 'keats-new)
-             (define-key map (kbd "e") 'keats-edit)))
+             (define-key map (kbd "e") 'keats-edit)
+             (define-key map (kbd "d") 'keats-destroy)))
           (t (local-unset-key prefix)))))
 
 

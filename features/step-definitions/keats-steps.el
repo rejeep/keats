@@ -22,3 +22,7 @@
 (Given "^I have one keat with key \"\\(.+\\)\" and description \"\\(.+\\)\"$"
        (lambda (key description)
          (add-to-list 'keats-list (make-keats-keat :key key :description description) t)))
+
+(Then "^I should have \\([0-9]+\\) keats?$"
+       (lambda (count)
+         (should (equal (string-to-number count) (length keats-list)))))
