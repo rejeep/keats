@@ -6,13 +6,18 @@
 (add-to-list 'load-path (expand-file-name "espuds" keats-util-path))
 (add-to-list 'load-path (expand-file-name "ert" keats-util-path))
 
+(defun keats-set-temp-file ()
+  (setq keats-file (make-temp-file "keats")))
+
+(keats-set-temp-file)
+
 (require 'keats)
 (require 'ert)
 (require 'espuds)
 
 (Before
  (keats-mode -1)
- (setq keats-file (make-temp-file "keats"))
+ (keats-set-temp-file)
  )
 
 (After
