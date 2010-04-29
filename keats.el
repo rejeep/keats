@@ -166,10 +166,10 @@
            (define-prefix-command 'keats-mode-map)
            (local-set-key prefix 'keats-mode-map)
            (let ((map keats-mode-map))
+             (define-key map (kbd "s") 'keats-show)
              (define-key map (kbd "n") 'keats-new)
              (define-key map (kbd "e") 'keats-edit)
-             (define-key map (kbd "d") 'keats-destroy)
-             (define-key map (kbd "s") 'keats-show)))
+             (define-key map (kbd "d") 'keats-destroy)))
           (t (local-unset-key prefix)))))
 
 
