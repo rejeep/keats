@@ -12,9 +12,9 @@
 
 (Before
  (keats-mode -1)
+ (setq keats-file (make-temp-file "keats"))
  )
 
 (After
  (setq keats-list ())
- (setq keats-file "~/.emacs.d/keats")
  )
