@@ -103,7 +103,7 @@ Feature: Keats Mode
     And I execute the action chain
     Then I should have 0 keats
 
-  Scenario: Destroy keat
+  Scenario: Destroy non existing keat
     When I start an action chain
     And I press "C-c k d"
     And I press "C-x b"
