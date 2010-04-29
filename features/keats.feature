@@ -122,7 +122,7 @@ Feature: Keats Mode
 
   Scenario: Show non existing keat description
     When I start an action chain
-    And I press "C-c k d"
+    And I press "C-c k s"
     And I press "C-x b"
     And I press "RET"
     And I execute the action chain
