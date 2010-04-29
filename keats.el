@@ -84,8 +84,9 @@
   (let ((key (keats-read-key)))
     (cond ((keats-exists-p key)
            (let ((keat (keats-find key)))
-             (keats-remove keat)
-             (message "Successfully destroyed keat for %s" key)))
+             (when (yes-or-no-p (concat "Remove keat " key "? "))
+               (keats-remove keat)
+               (message "Successfully destroyed keat for %s" key))))
           (t (message "No keat with key %s exists" key)))))
 
 (defun keats-create (keat)
