@@ -40,6 +40,9 @@
 (defvar keats-list ()
   "List containing all keats as `keats-keat' struct objects.")
 
+(defvar keats-file "~/.emacs.d/keats"
+  "Path to file where keats are stored.")
+
 (defvar keats-prefix-key "C-c k"
   "Prefix key for `keats-mode'.")
 
@@ -154,6 +157,32 @@
            (string= look-for (keats-keat-key keat)))))
     (find key keats-list :test compare-fn)))
 
+(defun keats-load ()
+  "Loads all from `keats-file' into `keats-list'."
+  (if (file-exists-p keats-file)
+      (let ((keats (keats-read)))
+        (when keats
+          (if (keats-keat-p (car keats))
+              (setq keats-list keats)
+            (keats-set-deprecated-format keats))))
+    (write-file keats-file nil)))
+
+(defun keats-read ()
+  "Reads the contents of `keats-file' a list object representation."
+  (condition-case err
+      (with-temp-buffer
+        (insert-file-contents-literally keats-file)
+        (read (current-buffer)))
+    (error)))
+
+(defun keats-set-deprecated-format (keats)
+  "Sets `keats-list' to KEATS, which is a list of keats in the old format."
+  (dolist (keat keats)
+    (keats-add
+     (make-keats-keat
+      :key (plist-get keat :key)
+      :description (plist-get keat :description)))))
+
 
 ;;;###autoload
 (define-minor-mode keats-mode
@@ -163,6 +192,7 @@
   :keymap keats-mode-map
   (let ((prefix (read-kbd-macro keats-prefix-key)))
     (cond (keats-mode
+           (keats-load)
            (define-prefix-command 'keats-mode-map)
            (local-set-key prefix 'keats-mode-map)
            (let ((map keats-mode-map))

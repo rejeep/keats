@@ -24,5 +24,43 @@
          (add-to-list 'keats-list (make-keats-keat :key key :description description) t)))
 
 (Then "^I should have \\([0-9]+\\) keats?$"
-       (lambda (count)
-         (should (equal (string-to-number count) (length keats-list)))))
+      (lambda (count)
+        (should (equal (string-to-number count) (length keats-list)))))
+
+(Then "^I should have these keats:$"
+      (lambda (keats)
+        (should (equal (length (cdr keats)) (length keats-list)))
+        (let (key description)
+          (dolist (keat (cdr keats))
+            (setq key (car keat))
+            (setq description (cadr keat))
+            (should
+             (some (lambda (k)
+                     (and
+                      (equal (keats-keat-key k) key)
+                      (equal (keats-keat-description k) description)))
+                   keats-list))))))
+
+(Given "^the keats-file is set to a non existing file$"
+       (lambda ()
+         (setq keats-file (make-temp-file "keats"))
+         ))
+
+(When "^I load this keats file:$"
+      (lambda (contents)
+        (with-temp-file keats-file
+          (insert contents))
+        (keats-load)))
+
+(When "^I load the keats file$"
+      (lambda ()
+        (keats-load)))
+
+(Then "^I should have a keats file$"
+      (lambda ()
+        (should (file-exists-p keats-file))))
+
+(Given "^I have this keats file:$"
+       (lambda (contents)
+         (with-temp-file keats-file
+          (insert contents))))

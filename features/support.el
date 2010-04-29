@@ -16,4 +16,5 @@
 
 (After
  (setq keats-list ())
+ (setq keats-file "~/.emacs.d/keats")
  )
