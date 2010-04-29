@@ -185,6 +185,10 @@
       :description (plist-get keat :description)))))
 
 
+;; Load keats from file.
+(keats-load)
+
+
 ;;;###autoload
 (define-minor-mode keats-mode
   "Keybinding Cheats."
@@ -193,7 +197,6 @@
   :keymap keats-mode-map
   (let ((prefix (read-kbd-macro keats-prefix-key)))
     (cond (keats-mode
-           (keats-load)
            (define-prefix-command 'keats-mode-map)
            (local-set-key prefix 'keats-mode-map)
            (let ((map keats-mode-map))

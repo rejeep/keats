@@ -40,13 +40,3 @@ Feature: Keats file
       """
       """
     Then I should have 0 keats
-
-  Scenario: Load keats file when starting mode
-    Given I have this keats file:
-      """
-      (
-       [cl-struct-keats-keat "C-x b" "Switches to another buffer"]
-       )
-      """
-    When I enable keats-mode
-    Then I should have a keat with key "C-x b" and description "Switches to another buffer"
