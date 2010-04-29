@@ -36,6 +36,8 @@
 
 (defstruct keats-keat key description)
 
+(add-hook 'kill-emacs-hook 'keats-write)
+
 
 (defvar keats-list ()
   "List containing all keats as `keats-keat' struct objects.")
@@ -184,8 +186,12 @@
       :key (plist-get keat :key)
       :description (plist-get keat :description)))))
 
+(defun keats-write ()
+  "Writes all keats to `keats-file'."
+  (interactive)
+  (with-temp-file keats-file
+    (insert (pp-to-string keats-list))))
 
-;; Load keats from file.
 (keats-load)
 
 
@@ -203,7 +209,8 @@
              (define-key map (kbd "s") 'keats-show)
              (define-key map (kbd "n") 'keats-new)
              (define-key map (kbd "e") 'keats-edit)
-             (define-key map (kbd "d") 'keats-destroy)))
+             (define-key map (kbd "d") 'keats-destroy)
+             (define-key map (kbd "w") 'keats-write)))
           (t (local-unset-key prefix)))))
 
 

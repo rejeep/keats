@@ -40,3 +40,13 @@ Feature: Keats file
       """
       """
     Then I should have 0 keats
+
+  Scenario: Write to file
+    Given I enable keats-mode
+    And I have one keat with key "C-x b" and description "Switches to another buffer"
+    When I press "C-c k w"
+    Then the keats file should look like this:
+      """
+      ([cl-struct-keats-keat "C-x b" "Switches to another buffer"])
+
+      """

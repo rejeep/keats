@@ -63,4 +63,11 @@
 (Given "^I have this keats file:$"
        (lambda (contents)
          (with-temp-file keats-file
-          (insert contents))))
+           (insert contents))))
+
+(Then "^the keats file should look like this:$"
+      (lambda (contents)
+        (with-temp-buffer
+          (insert-file-contents-literally keats-file)
+          (should (equal (buffer-substring-no-properties (point-min) (point-max)) contents)))))
+
