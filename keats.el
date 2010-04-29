@@ -47,6 +47,15 @@
   "Keymap for `keats-mode'.")
 
 
+(defun keats-show ()
+  "Print the description for input key."
+  (interactive)
+  (let ((key (keats-read-key)))
+    (if (keats-exists-p key)
+        (let ((keat (keats-find key)))
+          (message (keats-keat-description keat)))
+      (message "No keat with key %s exists" key))))
+
 (defun keats-new ()
   "Adds a new keat."
   (interactive)
@@ -159,7 +168,8 @@
            (let ((map keats-mode-map))
              (define-key map (kbd "n") 'keats-new)
              (define-key map (kbd "e") 'keats-edit)
-             (define-key map (kbd "d") 'keats-destroy)))
+             (define-key map (kbd "d") 'keats-destroy)
+             (define-key map (kbd "s") 'keats-show)))
           (t (local-unset-key prefix)))))
 
 
