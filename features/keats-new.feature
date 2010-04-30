@@ -47,6 +47,7 @@ Feature: Add new keat
     Then I should have 0 keats
     And I should see message "Keat is invalid and was not added"
 
+  # TODO: How to handle that keats.el does this in an error?
   # Scenario: Add new already existing keat
   #   Given I have one keat with key "C-x b" and description "Switches to another buffer"
   #   When I start an action chain
