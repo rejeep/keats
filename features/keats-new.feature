@@ -55,7 +55,7 @@ Feature: Add new keat
   #   And I press "RET"
   #   And I execute the action chain
   #   Then I should see message "Keat for key C-x b already defined"
-  #   And I should have keat with key "C-x b" and description "Switches to another buffer"
+  #   And I should have a keat with key "C-x b" and description "Switches to another buffer"
   
   Scenario: Abort adding new keat in description phase
     Given I start an action chain
