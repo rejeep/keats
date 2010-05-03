@@ -64,8 +64,11 @@
 (defun keats-new ()
   "Adds a new keat."
   (interactive)
-  (let ((keat (keats-read-keat)))
-    (keats-create keat)))
+  (let* ((keat (keats-read-keat))
+         (key (keats-keat-key keat)))
+    (if (keats-exists-p key)
+        (message "Keat for key %s already defined" (keats-keat-key keat))
+      (keats-create keat))))
 
 (defun keats-edit ()
   "Edits an already existing keat."
@@ -91,15 +94,11 @@
 
 (defun keats-create (keat)
   "Adds KEAT to the list of keats."
-  (when keat
-    (condition-case err
-        (cond ((keats-valid-keat-p keat)
-               (keats-add keat)
-               (message "Successfully added keat for %s" (keats-keat-key keat)))
-              (t
-               (message "Keat is invalid and was not added")))
-      (error
-       (message (error-message-string err))))))
+  (cond ((and keat (keats-valid-keat-p keat))
+         (keats-add keat)
+         (message "Successfully added keat for %s" (keats-keat-key keat)))
+        (t
+         (message "Keat is invalid and was not added"))))
 
 (defun keats-update (keat description)
   "Update KEAT's description."
@@ -116,12 +115,10 @@
 
 (defun keats-read-keat ()
   "Reads a key binding and a description and returns a `keats-keat' struct object."
-  (let ((key (keats-read-key)))
-    (when key
-      (if (keats-exists-p key)
-          (error "Keat for key %s already defined" key)
-        (let ((description (keats-read-description)))
-          (make-keats-keat :key key :description description))))))
+  (let ((key (keats-read-key)) description)
+    (unless (keats-exists-p key)
+      (setq description (keats-read-description)))
+    (make-keats-keat :key key :description description)))
 
 (defun keats-read-key ()
   "Reads a keat key from the minibuffer."

@@ -47,16 +47,15 @@ Feature: Add new keat
     Then I should have 0 keats
     And I should see message "Keat is invalid and was not added"
 
-  # TODO: How to handle that keats.el does this in an error?
-  # Scenario: Add new already existing keat
-  #   Given I have one keat with key "C-x b" and description "Switches to another buffer"
-  #   When I start an action chain
-  #   And I press "C-c k n"
-  #   And I press "C-x b"
-  #   And I press "RET"
-  #   And I execute the action chain
-  #   Then I should see message "Keat for key C-x b already defined"
-  #   And I should have a keat with key "C-x b" and description "Switches to another buffer"
+  Scenario: Add new already existing keat
+    Given I have one keat with key "C-x b" and description "Switches to another buffer"
+    When I start an action chain
+    And I press "C-c k n"
+    And I press "C-x b"
+    And I press "RET"
+    And I execute the action chain
+    Then I should see message "Keat for key C-x b already defined"
+    And I should have a keat with key "C-x b" and description "Switches to another buffer"
   
   Scenario: Abort adding new keat in description phase
     Given I start an action chain
