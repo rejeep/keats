@@ -53,110 +53,88 @@
 
 
 (defun keats-show ()
-  "Print the description for input key."
+  "Prints keat description."
   (interactive)
-  (let ((key (keats-read-key)))
-    (if (keats-exists-p key)
-        (let ((keat (keats-find key)))
-          (message (keats-keat-description keat)))
-      (message "No keat with key %s exists" key))))
+  (keats-get
+   (message (keats-keat-description keat))))
 
 (defun keats-new ()
-  "Adds a new keat."
+  "Adds new keat."
   (interactive)
-  (let* ((keat (keats-read-keat))
-         (key (keats-keat-key keat)))
-    (if (keats-exists-p key)
-        (message "Keat for key %s already defined" (keats-keat-key keat))
-      (keats-create keat))))
+  (let ((key (keats-read-key)))
+    (when key
+      (if (keats-find key)
+          (message "Keat \"%s\" already defined" key)
+        (keats-create key (keats-read-description))))))
+
+(defun keats-create (key description)
+  "Creates new keat and adds to list of keats."
+  (let ((keat (make-keats-keat :key key :description description)))
+    (add-to-list 'keats-list keat)
+    (message "Successfully added keat \"%s\"" key)))
 
 (defun keats-edit ()
-  "Edits an already existing keat."
+  "Edits a keat description."
   (interactive)
-  (let ((key (keats-read-key)))
-    (if (keats-exists-p key)
-        (let* ((keat (keats-find key))
-               (old-description (keats-keat-description keat))
-               (description (keats-read-description old-description)))
-          (keats-update keat description))
-      (message "No keat with key %s exists" key))))
-
-(defun keats-destroy ()
-  "Destroys an already existing keat."
-  (interactive)
-  (let ((key (keats-read-key)))
-    (cond ((keats-exists-p key)
-           (let ((keat (keats-find key)))
-             (when (yes-or-no-p (concat "Remove keat " key "? "))
-               (keats-remove keat)
-               (message "Successfully destroyed keat for %s" key))))
-          (t (message "No keat with key %s exists" key)))))
-
-(defun keats-create (keat)
-  "Adds KEAT to the list of keats."
-  (cond ((and keat (keats-valid-keat-p keat))
-         (keats-add keat)
-         (message "Successfully added keat for %s" (keats-keat-key keat)))
-        (t
-         (message "Keat is invalid and was not added"))))
+  (keats-get
+   (let* ((old-description (keats-keat-description keat))
+          (new-description (keats-read-description old-description)))
+     (keats-update keat new-description))))
 
 (defun keats-update (keat description)
-  "Update KEAT's description."
+  "Updates KEAT's description."
   (setf (keats-keat-description keat) description))
 
-(defun keats-add (keat)
-  "Adds KEAT to the list of keats."
-  (add-to-list 'keats-list keat t))
+(defun keats-destroy ()
+  "Destroyes keat."
+  (interactive)
+  (keats-get
+   (when (yes-or-no-p "Are you sure? ")
+     (setq keats-list (delete* keat keats-list))
+     (message "Successfully destroyed keat \"%s\"" key))))
 
-(defun keats-remove (keat)
-  "Removes KEAT from the list of keats."
-  ;; TODO: delete* should be destructive, but isn't. Why?
-  (setq keats-list (delete* keat keats-list)))
+(defmacro keats-get (&rest body)
+  "Reads a key and yields if corresponding keat exists."
+  `(let ((key (keats-read-key)) keat)
+     (when key
+       (setq keat (keats-find key))
+       (if keat
+           ,@body
+         (message "No keat with key \"%s\" exists" key)))))
 
-(defun keats-read-keat ()
-  "Reads a key binding and a description and returns a `keats-keat' struct object."
-  (let ((key (keats-read-key)) description)
-    (unless (keats-exists-p key)
-      (setq description (keats-read-description)))
-    (make-keats-keat :key key :description description)))
+(defun keats-find (key)
+  "Find keat with KEY."
+  (let ((compare-fn
+         (lambda (look-for keat)
+           (string= look-for (keats-keat-key keat)))))
+    (find key keats-list :test compare-fn)))
 
 (defun keats-read-key ()
-  "Reads a keat key from the minibuffer."
+  "Reads a key binding."
   (let ((cursor-in-echo-area t) (prompt "Key Binding: ") key description res)
     (setq key (read-key-sequence-vector prompt))
     (while (not (keats-terminating-key-p key))
       (setq res (vconcat res key))
       (setq key (read-key-sequence-vector (concat prompt (key-description res)))))
     (if (string= (key-description key) "RET")
-        (key-description res))))
-
-(defun keats-read-description (&optional initial-input)
-  "Reads a keat description from the minibuffer."
-  (read-string "Description: " initial-input))
-
-(defun keats-valid-keat-p (keat)
-  "Returns t if KEAT is valid, nil otherwise."
-  (and (keats-keat-p keat)
-       (let ((key (keats-keat-key keat))
-             (description (keats-keat-description keat)))
-         (not (or (string= key "") (string= description ""))))))
+        (let ((key-binding (key-description res)))
+          (if (keats-valid-key-p key-binding)
+              key-binding
+            (progn (message "Key \"%s\" is not a valid key" key-binding) nil))))))
 
 (defun keats-terminating-key-p (key)
-  "Returns t if KEY is a terminating key, nil otherwise."
   (let ((description (key-description key)))
     (or (string= description "RET")
         (string= description "C-g"))))
 
-(defun keats-exists-p (key)
-  "Returns t if KEY is already defined, nil otherwise."
-  (some (lambda (keat) (equal (keats-keat-key keat) key)) keats-list))
+(defun keats-valid-key-p (key)
+  (and
+   (not (equal key ""))
+   (not (equal key nil))))
 
-(defun keats-find (key)
-  "Returns the keat with KEY if it exists, nil otherwise."
-  (let ((compare-fn
-         (lambda (look-for keat)
-           (string= look-for (keats-keat-key keat)))))
-    (find key keats-list :test compare-fn)))
+(defun keats-read-description (&optional initial-input)
+  "Reads description."
+  (read-string "Description: " initial-input))
 
 (defun keats-load ()
   "Loads all from `keats-file' into `keats-list'."
@@ -179,7 +157,8 @@
 (defun keats-set-deprecated-format (keats)
   "Sets `keats-list' to KEATS, which is a list of keats in the old format."
   (dolist (keat keats)
-    (keats-add
+    (add-to-list
+     'keats-list
      (make-keats-keat
       :key (plist-get keat :key)
       :description (plist-get keat :description)))))
@@ -188,8 +167,10 @@
   "Writes all keats to `keats-file'."
   (interactive)
   (with-temp-file keats-file
-    (insert (pp-to-string keats-list))))
+    (insert (pp-to-string keats-list)))
+  (message "Wrote keats to %s" keats-file))
 
+;; Loads keats file.
 (keats-load)
 
 

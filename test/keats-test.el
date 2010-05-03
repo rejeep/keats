@@ -6,19 +6,6 @@
   (should-not (keats-terminating-key-p [16]))    ;; C-p
   (should-not (keats-terminating-key-p [3 13]))) ;; C-c RET
 
-(ert-deftest valid-keats ()
-  (let ((keat (make-keats-keat :key "C-x b" :description "Valid")))
-    (should (keats-valid-keat-p keat))))
-
-(ert-deftest invalid-keats ()
-  (let ((keats
-         (list
-          (make-keats-keat :key ""      :description "Valid")
-          (make-keats-keat :key "C-x b" :description "")
-          nil)))
-    (dolist (keat keats)
-      (should-not (keats-valid-keat-p keat)))))
-
 (ert-deftest prefix-key ()
   (should (equal "C-c k" keats-prefix-key)))
 
@@ -26,42 +13,6 @@
   (with-mock
    (stub read-string => "description")
    (should (equal "description" (keats-read-description)))))
-
-(ert-deftest read-key-no-key ()
-  (with-mock
-   (stub keats-read-key => nil)
-   (should-not (keats-read-keat))))
-
-(ert-deftest read-key-with-key ()
-  (with-mock
-   (stub keats-read-key => "C-x b")
-   (stub keats-read-description => "description")
-   (let* ((keat (keats-read-keat))
-          (key (keats-keat-key keat))
-          (description (keats-keat-description keat)))
-     (should (keats-keat-p keat))
-     (should (equal "C-x b" key))
-     (should (equal "description" description)))))
-
-(ert-deftest exists-key-does-not-exist ()
-  (preserve-keats
-   (keats-add (make-keats-keat :key "C-x b"))
-   (should-not (keats-exists-p "C-x C-b"))))
-
-(ert-deftest exists-key-does-exist ()
-  (preserve-keats
-   (keats-add (make-keats-keat :key "C-x b"))
-   (should (keats-exists-p "C-x b"))))
-
-(ert-deftest add-keat ()
-  (preserve-keats
-   (keats-add (make-keats-keat :key "C-x b" :description "description"))
-   (let* ((keat (car keats-list))
-          (key (keats-keat-key keat))
-          (description (keats-keat-description keat)))
-     (should (equal 1 (length keats-list)))
-     (should (equal "C-x b" key))
-     (should (equal "description" description)))))
 
 (ert-deftest find-keat-does-not-exist ()
   (preserve-keats
@@ -80,16 +31,27 @@
     (keats-update keat "new")
     (should (equal "new" (keats-keat-description keat)))))
 
-(ert-deftest remove-keat ()
+(ert-deftest get-existing-key ()
   (preserve-keats
-   (let ((keat (make-keats-keat :key "C-x b")))
-     (keats-add keat)
-     (should (equal 1 (length keats-list)))
-     (keats-remove keat)
-     (should-not keats-list))))
+   (with-mock
+    (stub keats-read-key => "C-x b")
+    (let ((keat (make-keats-keat :key "C-x b")))
+      (keats-add keat)
+      (keats-get
+       (should (keats-keat-p keat)))))))
+
+(ert-deftest get-non-existing-key ()
+  (with-mock
+   (stub keats-read-key => "C-x b")
+   (keats-get
+    (should-not keat))))
 
 
 (defmacro preserve-keats (&rest body)
   "Executes body without messing with `keats-list'."
   `(let ((keats-list))
      ,@body))
+
+(defun keats-add (keat)
+  "Adds KEAT to `keats-list'."
+  (add-to-list 'keats-list keat))

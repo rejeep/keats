@@ -15,7 +15,7 @@ Feature: Add new keat
     And I press "RET"
     And I execute the action chain
     Then I should have a keat with key "C-x b" and description "Switches to another buffer"
-    And I should see message "Successfully added keat for C-x b"
+    And I should see message "Successfully added keat "C-x b""
 
   Scenario: Abort adding new keat in key binding phase
     When I start an action chain
@@ -34,18 +34,7 @@ Feature: Add new keat
     And I press "RET"
     And I execute the action chain
     Then I should have 0 keats
-    And I should see message "Keat is invalid and was not added"
-    
-  Scenario: Add new keat with invalid description
-    When I start an action chain
-    And I press "C-c k n"
-    And I press "C-x b"
-    And I press "RET"
-    # No typing
-    And I press "RET"
-    And I execute the action chain
-    Then I should have 0 keats
-    And I should see message "Keat is invalid and was not added"
+    And I should see message "Key "" is not a valid key"
 
   Scenario: Add new already existing keat
     Given I have one keat with key "C-x b" and description "Switches to another buffer"
@@ -54,7 +43,7 @@ Feature: Add new keat
     And I press "C-x b"
     And I press "RET"
     And I execute the action chain
-    Then I should see message "Keat for key C-x b already defined"
+    Then I should see message "Keat "C-x b" already defined"
     And I should have a keat with key "C-x b" and description "Switches to another buffer"
   
   Scenario: Abort adding new keat in description phase

@@ -9,6 +9,8 @@
 (add-to-list 'load-path (expand-file-name "ert" keats-util-path))
 (add-to-list 'load-path (expand-file-name "el-mock" keats-util-path))
 
+(setq keats-file (make-temp-file "keats"))
+
 (require 'keats)
 (require 'ert)
 (require 'el-mock)

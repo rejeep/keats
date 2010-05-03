@@ -16,6 +16,7 @@ Feature: Destroy keat
     And I press "RET"
     And I execute the action chain
     Then I should have 0 keats
+    And I should see message "Successfully destroyed keat "C-x b""
 
   Scenario: Change of mind when destroying keat
     Given I have one keat with key "C-x b" and description "Switches to another buffer"
@@ -34,4 +35,4 @@ Feature: Destroy keat
     And I press "C-x b"
     And I press "RET"
     And I execute the action chain
-    Then I should see message "No keat with key C-x b exists"
+    Then I should see message "No keat with key "C-x b" exists"

@@ -23,4 +23,4 @@ Feature: Edit keat
     And I press "C-x b"
     And I press "RET"
     And I execute the action chain
-    Then I should see message "No keat with key C-x b exists"
+    Then I should see message "No keat with key "C-x b" exists"
